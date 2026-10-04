@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rashi Elegant Cake - Admin</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+<header>
+  <div class="brand">🍰 Rashi <span>Elegant Cake</span></div>
+  <nav><a href="index.html">View Website</a></nav>
+</header>
+
+<main class="admin-wrap">
+  <div id="loginBox" class="admin-card">
+    <p class="eyebrow">PRIVATE ADMIN AREA</p>
+    <h1>Rashi Admin</h1>
+    <p>Only Rashi should use this page.</p>
+    <input id="adminPassword" type="password" placeholder="Admin password">
+    <button class="btn full" onclick="login()">Login</button>
+    <p id="loginError" class="error"></p>
+  </div>
+
+  <div id="panel" class="hidden">
+    <div class="admin-top">
+      <div><p class="eyebrow">CAKE MANAGEMENT</p><h1>Manage Cakes</h1></div>
+      <button class="btn secondary" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="admin-card">
+      <h2 id="formTitle">Add New Cake</h2>
+      <form id="cakeForm" class="admin-form">
+        <input type="hidden" id="editId">
+        <label>Cake Name<input id="aName" required placeholder="Chocolate Birthday Cake"></label>
+        <label>Cake Photo
+          <input id="aImage" type="file" accept="image/*">
+          <small>Choose a JPG/PNG/WebP photo from your computer. It is stored in this browser.</small>
+          <div id="preview"></div>
+        </label>
+        <div class="two">
+          <label>500g Price (Rs.)<input id="a500" type="number" min="0" required></label>
+          <label>1KG Price (Rs.)<input id="a1000" type="number" min="0" required></label>
+        </div>
+        <label class="check"><input id="aAvailable" type="checkbox" checked> Available for customers</label>
+        <button class="btn" type="submit">Save Cake</button>
+        <button class="btn secondary hidden" type="button" id="cancelEdit" onclick="resetForm()">Cancel Edit</button>
+      </form>
+    </div>
+
+    <div class="admin-card">
+      <h2>Current Cake Designs</h2>
+      <div id="adminList"></div>
+    </div>
+  </div>
+</main>
+<script src="admin.js"></script>
+</body>
+</html>

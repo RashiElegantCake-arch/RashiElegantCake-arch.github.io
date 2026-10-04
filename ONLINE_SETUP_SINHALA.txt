@@ -1,0 +1,19 @@
+RASHI ELEGANT CAKE - ONLINE DATABASE SETUP
+
+1. Supabase account එකක් හදා New Project එකක් create කරන්න.
+2. SQL Editor -> supabase.sql එක paste කර Run කරන්න.
+3. Storage -> New Bucket -> cake-images කියලා bucket එකක් හදා Public කරන්න.
+4. Authentication -> Users -> Add user. Rashiගේ email/password එකෙන් account එකක් හදන්න.
+5. User UUID එක copy කර SQL Editor එකේ:
+   insert into public.admins(user_id) values('USER_UUID_HERE');
+   USER_UUID_HERE වෙනුවට UUID එක දාලා Run කරන්න.
+6. Project URL + Publishable/Anon key ගන්න.
+7. supabase-config.js එකේ values දෙක paste කරන්න.
+8. Files hosting එකට upload කරන්න.
+
+Rashiට phone එකෙන් admin.html login වෙලා cake add/edit/delete, photo upload/change, 500g/1KG price සහ availability වෙනස් කළ හැක.
+
+NOTE: දැනට මෙහි මුල් website files සහ online database SQL/config starter එක ඇතුළත්. Supabase URL/key එක project-specific නිසා ඒ values නැතුව මට live database එක connect කරන්න බැහැ.
+
+WhatsApp: 0768727152
+Secret/service_role key එක browser code එකට දාන්න එපා.
