@@ -39,7 +39,7 @@ async function loadAdminCakes() {
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
       const { data, error } = await supabaseClient.from("cakes").select("*");
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         renderAdminList(data);
         return;
       }
@@ -99,26 +99,28 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
 
   let finalImageUrl = editImage || "images/cake-placeholder-1.svg";
 
-  // Upload Photo to Supabase Storage
+  // Upload Photo to Supabase Storage Bucket ('cake-images')
   if (imageFileToUpload && typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
       const fileName = `${Date.now()}_${imageFileToUpload.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
       const { data: uploadData, error: uploadError } = await supabaseClient.storage
-        .from("cakes")
+        .from("cake-images")
         .upload(fileName, imageFileToUpload);
 
       if (!uploadError) {
         const { data: publicUrlData } = supabaseClient.storage
-          .from("cakes")
+          .from("cake-images")
           .getPublicUrl(fileName);
         finalImageUrl = publicUrlData.publicUrl;
+      } else {
+        console.error("Upload error:", uploadError);
       }
     } catch (err) {
       console.error("Storage upload exception:", err);
     }
   }
 
-  // Exact payload matching your Supabase columns: name, image_url, price_500, price_1000, available
+  // Database Save Payload
   const dbPayload = {
     name: name,
     image_url: finalImageUrl,
