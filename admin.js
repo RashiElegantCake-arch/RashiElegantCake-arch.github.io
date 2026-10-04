@@ -32,7 +32,6 @@ function showPanel() {
   loadAdminCakes();
 }
 
-// Fetch cakes from Supabase
 async function loadAdminCakes() {
   const list = document.getElementById("adminList");
   list.innerHTML = "<p>Loading cakes...</p>";
@@ -40,7 +39,7 @@ async function loadAdminCakes() {
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
       const { data, error } = await supabaseClient.from("cakes").select("*");
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         renderAdminList(data);
         return;
       }
@@ -57,9 +56,9 @@ function renderAdminList(cakes) {
   const list = document.getElementById("adminList");
   list.innerHTML = cakes.map(c => {
     const imgUrl = c.image_url || c.image || "images/cake-placeholder-1.svg";
-    const p500 = c.price_500g || c.p500 || 0;
-    const p1000 = c.price_1kg || c.p1000 || 0;
-    const avail = c.is_available !== undefined ? c.is_available : (c.available !== undefined ? c.available : true);
+    const p500 = c.price_500 || c.p500 || 0;
+    const p1000 = c.price_1000 || c.p1000 || 0;
+    const avail = c.available !== undefined ? c.available : true;
     
     return `
       <div class="admin-row">
@@ -77,7 +76,6 @@ function renderAdminList(cakes) {
   }).join("") || "<p>No cakes. Add your first design.</p>";
 }
 
-// Image file selection
 document.getElementById("aImage").addEventListener("change", e => {
   const f = e.target.files[0];
   if (!f) return;
@@ -91,7 +89,6 @@ document.getElementById("aImage").addEventListener("change", e => {
   r.readAsDataURL(f);
 });
 
-// Form Submit -> Upload image & Save to Supabase
 document.getElementById("cakeForm").addEventListener("submit", async e => {
   e.preventDefault();
   const id = document.getElementById("editId").value;
@@ -102,7 +99,7 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
 
   let finalImageUrl = editImage || "images/cake-placeholder-1.svg";
 
-  // Upload photo to Supabase Storage
+  // Upload Photo to Supabase Storage
   if (imageFileToUpload && typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
       const fileName = `${Date.now()}_${imageFileToUpload.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
@@ -115,25 +112,23 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
           .from("cakes")
           .getPublicUrl(fileName);
         finalImageUrl = publicUrlData.publicUrl;
-      } else {
-        console.warn("Storage upload warning:", uploadError);
       }
     } catch (err) {
       console.error("Storage upload exception:", err);
     }
   }
 
-  // Save to Supabase Database
+  // Exact payload matching your Supabase columns: name, image_url, price_500, price_1000, available
+  const dbPayload = {
+    name: name,
+    image_url: finalImageUrl,
+    price_500: p500,
+    price_1000: p1000,
+    available: available
+  };
+
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
-      const dbPayload = {
-        name: name,
-        image_url: finalImageUrl,
-        price_500g: p500,
-        price_1kg: p1000,
-        is_available: available
-      };
-
       if (id) {
         await supabaseClient.from("cakes").update(dbPayload).eq("id", id);
       } else {
@@ -144,51 +139,27 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
     }
   }
 
-  // Local Storage save
-  let localCakes = JSON.parse(localStorage.getItem("rashiCakes") || "[]");
-  let obj = {
-    id: id || Date.now().toString(),
-    name: name,
-    image: finalImageUrl,
-    p500: p500,
-    p1000: p1000,
-    available: available
-  };
-
-  if (id) {
-    localCakes = localCakes.map(c => String(c.id) === String(id) ? obj : c);
-  } else {
-    localCakes.push(obj);
-  }
-  localStorage.setItem("rashiCakes", JSON.stringify(localCakes));
-
   resetForm();
-  loadAdminCakes();
+  await loadAdminCakes();
   alert("Cake saved successfully!");
 });
 
 async function editCake(id) {
   let cake = null;
-  
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     const { data } = await supabaseClient.from("cakes").select("*").eq("id", id).single();
     if (data) cake = data;
-  }
-
-  if (!cake) {
-    const localCakes = JSON.parse(localStorage.getItem("rashiCakes") || "[]");
-    cake = localCakes.find(x => String(x.id) === String(id));
   }
 
   if (!cake) return;
 
   document.getElementById("editId").value = cake.id;
   document.getElementById("aName").value = cake.name;
-  document.getElementById("a500").value = cake.price_500g || cake.p500;
-  document.getElementById("a1000").value = cake.price_1kg || cake.p1000;
-  document.getElementById("aAvailable").checked = cake.is_available !== undefined ? cake.is_available : cake.available;
+  document.getElementById("a500").value = cake.price_500;
+  document.getElementById("a1000").value = cake.price_1000;
+  document.getElementById("aAvailable").checked = cake.available;
   
-  editImage = cake.image_url || cake.image;
+  editImage = cake.image_url;
   imageFileToUpload = null;
 
   document.getElementById("preview").innerHTML = `<img src="${editImage}">`;
@@ -203,10 +174,6 @@ async function deleteCake(id) {
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     await supabaseClient.from("cakes").delete().eq("id", id);
   }
-
-  let localCakes = JSON.parse(localStorage.getItem("rashiCakes") || "[]");
-  localCakes = localCakes.filter(c => String(c.id) === String(id));
-  localStorage.setItem("rashiCakes", JSON.stringify(localCakes));
 
   loadAdminCakes();
 }
