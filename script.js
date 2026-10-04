@@ -1,24 +1,6 @@
-const DEFAULT_CAKES = [
-  { id: "1", name: "Chocolate Birthday Cake", image: "images/cake-placeholder-1.svg", p500: 2500, p1000: 4500, available: true },
-  { id: "2", name: "Strawberry Cream Cake", image: "images/cake-placeholder-2.svg", p500: 2800, p1000: 5000, available: true },
-  { id: "3", name: "Buttercream Rose Cake", image: "images/cake-placeholder-3.svg", p500: 3000, p1000: 5500, available: true },
-  { id: "4", name: "Pink Birthday Cake", image: "images/cake-placeholder-4.svg", p500: 2700, p1000: 4800, available: true }
-];
-
 let cakes = [];
 let selected = null;
 
-// LocalStorage load function
-function getLocalCakes() {
-  const x = localStorage.getItem("rashiCakes");
-  if (!x) {
-    localStorage.setItem("rashiCakes", JSON.stringify(DEFAULT_CAKES));
-    return DEFAULT_CAKES;
-  }
-  return JSON.parse(x);
-}
-
-// Fetch Cakes from Supabase or LocalStorage
 async function loadCakesData() {
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
@@ -27,21 +9,18 @@ async function loadCakesData() {
         cakes = data.map(item => ({
           id: String(item.id),
           name: item.name,
-          image: item.image_url || item.image || "images/cake-placeholder-1.svg",
-          p500: item.price_500g || item.p500 || 0,
-          p1000: item.price_1kg || item.p1000 || 0,
-          available: item.is_available !== undefined ? item.is_available : (item.available !== undefined ? item.available : true)
+          image: item.image_url || "images/cake-placeholder-1.svg",
+          p500: item.price_500 || 0,
+          p1000: item.price_1000 || 0,
+          available: item.available !== undefined ? item.available : true
         }));
         renderCakes();
         return;
       }
     } catch (err) {
-      console.warn("Supabase fetch error, fallback to local:", err);
+      console.warn("Supabase fetch error:", err);
     }
   }
-  
-  // Fallback to LocalStorage if Supabase fails or is empty
-  cakes = getLocalCakes();
   renderCakes();
 }
 
@@ -62,7 +41,7 @@ function renderCakes() {
         ${c.available ? `<button class="btn" onclick="openOrder('${c.id}')">Order This Cake</button>` : `<button class="btn secondary" disabled>Currently Unavailable</button>`}
       </div>
     </article>
-  `).join("") || "<p>No cakes available yet.</p>";
+  `).join("") || "<p>No cakes available yet. Please add cakes from Admin Panel.</p>";
 }
 
 function escapeHtml(s) {
