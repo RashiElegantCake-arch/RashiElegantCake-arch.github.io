@@ -2,6 +2,8 @@ const ADMIN_PASSWORD = "Rashi@2026";
 let editImage = null;
 let imageFileToUpload = null;
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500";
+
 function esc(s) {
   return String(s).replace(/[&<>"']/g, m => ({
     "&": "&amp;",
@@ -55,14 +57,14 @@ async function loadAdminCakes() {
 function renderAdminList(cakes) {
   const list = document.getElementById("adminList");
   list.innerHTML = cakes.map(c => {
-    const imgUrl = c.image_url || c.image || "images/cake-placeholder-1.svg";
+    const imgUrl = (c.image_url && !c.image_url.includes("images/cake-placeholder")) ? c.image_url : FALLBACK_IMAGE;
     const p500 = c.price_500 || c.p500 || 0;
     const p1000 = c.price_1000 || c.p1000 || 0;
     const avail = c.available !== undefined ? c.available : true;
     
     return `
       <div class="admin-row">
-        <img src="${imgUrl}">
+        <img src="${imgUrl}" onerror="this.src='${FALLBACK_IMAGE}'">
         <div>
           <b>${esc(c.name)}</b><br>
           <small>500g: Rs. ${Number(p500).toLocaleString()} • 1KG: Rs. ${Number(p1000).toLocaleString()} • ${avail ? "Available" : "Unavailable"}</small>
@@ -97,7 +99,7 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
   const p1000 = Number(document.getElementById("a1000").value);
   const available = document.getElementById("aAvailable").checked;
 
-  let finalImageUrl = editImage || "images/cake-placeholder-1.svg";
+  let finalImageUrl = editImage || FALLBACK_IMAGE;
 
   // Upload Photo to Supabase Storage Bucket ('cake-images')
   if (imageFileToUpload && typeof supabaseClient !== "undefined" && supabaseClient) {
@@ -113,14 +115,13 @@ document.getElementById("cakeForm").addEventListener("submit", async e => {
           .getPublicUrl(fileName);
         finalImageUrl = publicUrlData.publicUrl;
       } else {
-        console.error("Upload error:", uploadError);
+        console.error("Storage upload error:", uploadError);
       }
     } catch (err) {
       console.error("Storage upload exception:", err);
     }
   }
 
-  // Database Save Payload
   const dbPayload = {
     name: name,
     image_url: finalImageUrl,
@@ -164,7 +165,7 @@ async function editCake(id) {
   editImage = cake.image_url;
   imageFileToUpload = null;
 
-  document.getElementById("preview").innerHTML = `<img src="${editImage}">`;
+  document.getElementById("preview").innerHTML = `<img src="${editImage || FALLBACK_IMAGE}">`;
   document.getElementById("formTitle").textContent = "Edit Cake";
   document.getElementById("cancelEdit").classList.remove("hidden");
   scrollTo(0, 0);
