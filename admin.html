@@ -2,237 +2,597 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-  <title>Rashi Elegant Cake - Admin</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#fff7f8">
+
+    <title>Rashi Elegant Cake - Admin</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* ================= ADMIN ONLY ================= */
+
+        .admin-page {
+            background: #fff8fa;
+            min-height: 100vh;
+        }
+
+        .admin-wrap {
+            width: min(900px, calc(100% - 24px));
+            margin: auto;
+            padding: 35px 0 70px;
+        }
+
+        .admin-card {
+            background: white;
+            border: 1px solid #f0dfe4;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 5px 20px rgba(80, 30, 45, .06);
+        }
+
+        .admin-card h1,
+        .admin-card h2 {
+            color: #572534;
+            font-family: Georgia, serif;
+        }
+
+        .admin-card h1 {
+            font-size: 30px;
+        }
+
+        .admin-card h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .admin-card > p:not(.eyebrow):not(.error) {
+            color: #79676b;
+            font-size: 14px;
+            margin: 7px 0 18px;
+        }
+
+        .eyebrow {
+            color: #a34d67;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .admin-card input:not([type="checkbox"]) {
+            width: 100%;
+            min-height: 50px;
+            padding: 12px;
+            margin-top: 7px;
+
+            border: 1px solid #e5d2d9;
+            border-radius: 12px;
+
+            background: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .admin-card input:focus {
+            border-color: #a34d67;
+        }
+
+        .btn.full {
+            width: 100%;
+            margin-top: 14px;
+        }
+
+        .admin-page .btn {
+            min-height: 50px;
+            padding: 0 18px;
+
+            border: 0;
+            border-radius: 12px;
+
+            background: #7e3048;
+            color: white;
+
+            font-weight: 800;
+        }
+
+        .admin-page .btn.secondary {
+            background: #f3e4e8;
+            color: #7e3048;
+        }
+
+        .error {
+            color: #c0392b;
+            font-size: 13px;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .admin-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .admin-top h1 {
+            font-size: 28px;
+        }
+
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .admin-form label {
+            color: #513941;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .admin-form input[type="file"] {
+            padding: 10px !important;
+            background: #fff8fa !important;
+        }
+
+        .admin-form small {
+            display: block;
+            margin-top: 7px;
+            color: #887177;
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .check input {
+            width: 20px;
+            height: 20px;
+            accent-color: #7e3048;
+        }
+
+        #preview {
+            margin-top: 12px;
+        }
+
+        #preview img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: #fff7f8;
+            border: 1px solid #f0dfe4;
+            padding: 5px;
+        }
+
+        /* ================= ADMIN LIST ================= */
+
+        #adminList {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-row {
+            display: grid;
+            grid-template-columns: 75px 1fr auto;
+            align-items: center;
+            gap: 12px;
+
+            padding: 11px;
+
+            border: 1px solid #f0dfe4;
+            border-radius: 14px;
+
+            background: #fffafa;
+        }
+
+        .admin-row > img {
+            width: 75px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .admin-row b {
+            color: #50323b;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .admin-row small {
+            display: block;
+            margin-top: 5px;
+            color: #79676b;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .smallbtn {
+            min-width: 70px;
+            min-height: 40px;
+
+            border: 0;
+            border-radius: 9px;
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .smallbtn.edit {
+            background: #f3e4e8;
+            color: #7e3048;
+        }
+
+        .smallbtn.delete {
+            background: #fde4e4;
+            color: #b32d2d;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 500px) {
+
+            .admin-wrap {
+                width: calc(100% - 18px);
+                padding-top: 22px;
+            }
+
+            .admin-card {
+                padding: 16px;
+                border-radius: 15px;
+            }
+
+            .admin-top {
+                align-items: flex-start;
+            }
+
+            .admin-top h1 {
+                font-size: 24px;
+            }
+
+            .admin-top .btn {
+                min-height: 44px;
+                padding: 0 13px;
+                font-size: 12px;
+            }
+
+            .two {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-row {
+                grid-template-columns: 65px 1fr;
+            }
+
+            .admin-row > img {
+                width: 65px;
+                height: 80px;
+            }
+
+            .actions {
+                grid-column: 1 / -1;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .smallbtn {
+                min-height: 44px;
+            }
+        }
+
+    </style>
 </head>
+
 
 <body class="admin-page">
 
-<header>
-  <div class="brand">
-    🍰 Rashi <span>Elegant Cake</span>
-  </div>
 
-  <nav>
-    <a href="index.html">View Website</a>
-  </nav>
+<!-- ================= HEADER ================= -->
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a href="index.html" class="brand">
+
+            <div class="brand-icon">🍰</div>
+
+            <div class="brand-text">
+                <strong>Rashi</strong>
+                <span>Elegant Cake</span>
+            </div>
+
+        </a>
+
+
+        <a href="index.html"
+           class="btn"
+           style="
+                min-height:42px;
+                padding:0 14px;
+                display:flex;
+                align-items:center;
+                border-radius:10px;
+                background:#7e3048;
+                color:white;
+                font-size:12px;
+                font-weight:800;
+           ">
+
+            View Website
+
+        </a>
+
+    </div>
+
 </header>
+
 
 <main class="admin-wrap">
 
-  <!-- LOGIN -->
-  <div id="loginBox" class="admin-card">
 
-    <p class="eyebrow">
-      PRIVATE ADMIN AREA
-    </p>
+    <!-- ================= LOGIN ================= -->
 
-    <h1>Rashi Admin</h1>
-
-    <p>Only Rashi should use this page.</p>
-
-    <input
-      id="adminPassword"
-      type="password"
-      placeholder="Admin password"
-    >
-
-    <button
-      class="btn full"
-      onclick="login()"
-    >
-      Login
-    </button>
-
-    <p
-      id="loginError"
-      class="error"
-    ></p>
-
-  </div>
-
-
-  <!-- ADMIN PANEL -->
-  <div id="panel" class="hidden">
-
-    <div class="admin-top">
-
-      <div>
+    <div id="loginBox" class="admin-card">
 
         <p class="eyebrow">
-          CAKE MANAGEMENT
+            PRIVATE ADMIN AREA
         </p>
 
         <h1>
-          Manage Cakes
+            Rashi Admin
         </h1>
 
-      </div>
+        <p>
+            Only Rashi should use this page.
+        </p>
 
-      <button
-        class="btn secondary"
-        onclick="logout()"
-      >
-        Logout
-      </button>
+
+        <input
+            id="adminPassword"
+            type="password"
+            placeholder="Admin password"
+            autocomplete="current-password"
+        >
+
+
+        <button
+            class="btn full"
+            type="button"
+            onclick="login()"
+        >
+            🔐 Login
+        </button>
+
+
+        <p id="loginError" class="error"></p>
 
     </div>
 
 
-    <!-- ADD / EDIT CAKE -->
-    <div class="admin-card">
+    <!-- ================= PANEL ================= -->
 
-      <h2 id="formTitle">
-        Add New Cake
-      </h2>
-
-      <form
-        id="cakeForm"
-        class="admin-form"
-      >
-
-        <input
-          type="hidden"
-          id="editId"
-        >
+    <div id="panel" class="hidden">
 
 
-        <!-- CAKE NAME -->
-        <label>
-          Cake Name
+        <!-- TOP -->
 
-          <input
-            id="aName"
-            required
-            placeholder="Chocolate Birthday Cake"
-          >
+        <div class="admin-top">
 
-        </label>
+            <div>
 
+                <p class="eyebrow">
+                    CAKE MANAGEMENT
+                </p>
 
-        <!-- CAKE PHOTO -->
-        <label>
+                <h1>
+                    Manage Cakes
+                </h1>
 
-          Cake Photo
-
-          <input
-            id="aImage"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-          >
-
-          <small>
-            JPG, PNG or WebP photo.
-            The photo will be uploaded to Supabase Storage.
-          </small>
-
-          <div id="preview"></div>
-
-        </label>
+            </div>
 
 
-        <!-- PRICES -->
-        <div class="two">
-
-          <label>
-            500g Price (Rs.)
-
-            <input
-              id="a500"
-              type="number"
-              min="0"
-              required
+            <button
+                class="btn secondary"
+                type="button"
+                onclick="logout()"
             >
-          </label>
-
-
-          <label>
-            1KG Price (Rs.)
-
-            <input
-              id="a1000"
-              type="number"
-              min="0"
-              required
-            >
-          </label>
+                Logout
+            </button>
 
         </div>
 
 
-        <!-- AVAILABLE -->
-        <label class="check">
+        <!-- ================= ADD / EDIT ================= -->
 
-          <input
-            id="aAvailable"
-            type="checkbox"
-            checked
-          >
+        <div class="admin-card">
 
-          Available for customers
-
-        </label>
+            <h2 id="formTitle">
+                Add New Cake
+            </h2>
 
 
-        <!-- SAVE -->
-        <button
-          class="btn"
-          type="submit"
-        >
-          Save Cake
-        </button>
+            <form id="cakeForm"
+                  class="admin-form">
 
 
-        <!-- CANCEL -->
-        <button
-          class="btn secondary hidden"
-          type="button"
-          id="cancelEdit"
-          onclick="resetForm()"
-        >
-          Cancel Edit
-        </button>
+                <input
+                    type="hidden"
+                    id="editId"
+                >
 
-      </form>
+
+                <!-- NAME -->
+
+                <label>
+
+                    Cake Name
+
+                    <input
+                        id="aName"
+                        required
+                        placeholder="Chocolate Birthday Cake"
+                    >
+
+                </label>
+
+
+                <!-- IMAGE -->
+
+                <label>
+
+                    Cake Photo
+
+                    <input
+                        id="aImage"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <small>
+                        JPG, PNG or WebP.
+                        Maximum recommended size: 5MB.
+                    </small>
+
+
+                    <div id="preview"></div>
+
+                </label>
+
+
+                <!-- PRICES -->
+
+                <div class="two">
+
+                    <label>
+
+                        500g Price (Rs.)
+
+                        <input
+                            id="a500"
+                            type="number"
+                            min="0"
+                            required
+                        >
+
+                    </label>
+
+
+                    <label>
+
+                        1KG Price (Rs.)
+
+                        <input
+                            id="a1000"
+                            type="number"
+                            min="0"
+                            required
+                        >
+
+                    </label>
+
+                </div>
+
+
+                <!-- AVAILABLE -->
+
+                <label class="check">
+
+                    <input
+                        id="aAvailable"
+                        type="checkbox"
+                        checked
+                    >
+
+                    Available for customers
+
+                </label>
+
+
+                <!-- SAVE -->
+
+                <button
+                    class="btn"
+                    type="submit"
+                >
+                    💾 Save Cake
+                </button>
+
+
+                <!-- CANCEL -->
+
+                <button
+                    class="btn secondary hidden"
+                    type="button"
+                    id="cancelEdit"
+                    onclick="resetForm()"
+                >
+                    Cancel Edit
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= CAKES ================= -->
+
+        <div class="admin-card">
+
+            <h2>
+                Current Cake Designs
+            </h2>
+
+            <div id="adminList">
+                Loading cakes...
+            </div>
+
+        </div>
+
 
     </div>
-
-
-    <!-- CURRENT CAKES -->
-    <div class="admin-card">
-
-      <h2>
-        Current Cake Designs
-      </h2>
-
-      <div id="adminList"></div>
-
-    </div>
-
-  </div>
 
 </main>
 
 
-<!-- IMPORTANT:
-     Supabase library MUST load first.
--->
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
-<!-- Supabase connection -->
 <script src="supabase-config.js"></script>
 
-
-<!-- Admin functions -->
 <script src="admin.js"></script>
 
 
 </body>
-
 </html>
