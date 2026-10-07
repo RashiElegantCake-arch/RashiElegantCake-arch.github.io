@@ -153,10 +153,7 @@ nav a {
 
 .cake-grid {
   display: grid;
-
-  /* PC - 4 cards */
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 30px;
   align-items: stretch;
 }
@@ -186,20 +183,18 @@ nav a {
 
 .cake-card img {
   width: 100%;
-
   aspect-ratio: 4 / 5;
   height: auto;
 
   /*
-    Cake photo එක crop නොකර
-    සම්පූර්ණ photo එක පෙන්වයි.
+    contain = cake එක unnecessarily crop වෙන්නේ නැහැ.
+    Photo එකේ සම්පූර්ණ cake එක පෙන්වීමට උත්සාහ කරයි.
   */
   object-fit: contain;
 
   object-position: center;
 
   background: #f8e9e8;
-
   display: block;
 }
 
@@ -212,23 +207,16 @@ nav a {
 
   display: flex;
   flex-direction: column;
-
   flex: 1;
-
   min-width: 0;
 }
 
 .badge {
   font-size: 11px;
-
   background: #eee;
-
   padding: 5px 8px;
-
   border-radius: 10px;
-
   display: inline-block;
-
   width: fit-content;
 }
 
@@ -236,12 +224,10 @@ nav a {
   margin: 10px 0 8px;
 
   font-size: 21px;
-
   line-height: 1.3;
 
   /*
-    Long cake names screen එකෙන්
-    පිටතට යන්නේ නැහැ.
+    Long cake names screen එකෙන් පිටත යන්නේ නැහැ.
   */
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -253,13 +239,10 @@ nav a {
 
 .prices {
   display: flex;
-
   gap: 8px;
-
   flex-wrap: wrap;
 
   color: #754052;
-
   font-size: 14px;
 
   margin: 12px 0 18px;
@@ -267,16 +250,11 @@ nav a {
 
 .price {
   background: #fff0f3;
-
   padding: 7px 10px;
-
   border-radius: 12px;
 
   line-height: 1.3;
-
   white-space: normal;
-
-  overflow-wrap: anywhere;
 }
 
 /* =========================
@@ -285,7 +263,6 @@ nav a {
 
 .cake-body .btn {
   width: 100%;
-
   margin-top: auto;
 
   text-align: center;
@@ -293,7 +270,6 @@ nav a {
   padding: 13px 12px;
 
   white-space: normal;
-
   line-height: 1.3;
 }
 
@@ -307,33 +283,23 @@ nav a {
 
 .about {
   display: grid;
-
   grid-template-columns: 2fr 1fr;
-
   gap: 40px;
-
   align-items: center;
-
   background: #fff;
 }
 
 .about p:not(.eyebrow) {
   font-size: 17px;
-
   line-height: 1.8;
 }
 
 .about-card {
   background: #fff0f3;
-
   border-radius: 25px;
-
   padding: 45px;
-
   text-align: center;
-
   font-size: 50px;
-
   color: #9e4f6d;
 }
 
@@ -347,7 +313,6 @@ nav a {
 
 .contact {
   text-align: center;
-
   background: #fdf0f2;
 }
 
@@ -365,13 +330,9 @@ nav a {
 
 footer {
   text-align: center;
-
   padding: 25px;
-
   background: #3d252d;
-
   color: #fff;
-
   font-size: 13px;
 }
 
@@ -381,17 +342,12 @@ footer {
 
 .modal {
   position: fixed;
-
   inset: 0;
-
   background: rgba(40, 20, 25, .65);
-
   z-index: 50;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   padding: 20px;
@@ -403,47 +359,34 @@ footer {
 
 .modal-box {
   background: #fffafa;
-
   width: min(650px, 100%);
-
   max-height: 92vh;
-
   overflow: auto;
 
   border-radius: 24px;
-
   padding: 30px;
-
   position: relative;
 }
 
 .close {
   position: absolute;
-
   right: 18px;
-
   top: 12px;
 
   border: 0;
-
   background: none;
 
   font-size: 32px;
-
   cursor: pointer;
 }
 
 .selected-cake {
   display: flex;
-
   gap: 15px;
-
   align-items: center;
 
   background: #fff0f3;
-
   padding: 12px;
-
   border-radius: 15px;
 
   margin: 15px 0;
@@ -453,17 +396,14 @@ footer {
 
 .selected-cake img {
   width: 70px;
-
   height: 75px;
 
   aspect-ratio: 4 / 5;
 
   object-fit: contain;
-
   object-position: center;
 
   border-radius: 10px;
-
   background: #f8e9e8;
 
   flex-shrink: 0;
@@ -471,17 +411,13 @@ footer {
 
 .selected-cake b {
   overflow-wrap: anywhere;
-
   word-break: break-word;
 }
 
 label {
   display: block;
-
   font-weight: 700;
-
   margin: 12px 0;
-
   color: #533740;
 }
 
@@ -489,19 +425,15 @@ input,
 select,
 textarea {
   display: block;
-
   width: 100%;
 
   padding: 12px;
-
   margin-top: 7px;
 
   border: 1px solid #decbd0;
-
   border-radius: 10px;
 
   font: inherit;
-
   background: #fff;
 
   max-width: 100%;
@@ -509,23 +441,18 @@ textarea {
 
 textarea {
   min-height: 85px;
-
   resize: vertical;
 }
 
 .total {
   font-weight: 800;
-
   font-size: 18px;
-
   margin: 15px 0;
-
   color: #8d3e5d;
 }
 
 .full {
   width: 100%;
-
   text-align: center;
 }
 
@@ -539,57 +466,41 @@ textarea {
 
 .admin-wrap {
   width: min(1000px, 92%);
-
   margin: 45px auto;
 }
 
 .admin-card {
   background: #fff;
-
   border: 1px solid #eddfe1;
-
   border-radius: 20px;
-
   padding: 25px;
-
   margin-bottom: 25px;
-
   box-shadow: 0 8px 25px rgba(70, 35, 45, .06);
 }
 
 .admin-top {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 20px;
 }
 
 .admin-form small {
   display: block;
-
   color: #806b72;
-
   margin-top: 5px;
-
   font-weight: normal;
 }
 
 .two {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 15px;
 }
 
 .check {
   display: flex;
-
   gap: 10px;
-
   align-items: center;
 }
 
@@ -599,45 +510,32 @@ textarea {
 
 .admin-row {
   display: grid;
-
   grid-template-columns: 90px 1fr auto;
-
   gap: 15px;
-
   align-items: center;
 
   border-top: 1px solid #eee;
-
   padding: 15px 0;
 }
 
 .admin-row img {
   width: 90px;
-
   height: 75px;
-
   object-fit: cover;
-
   border-radius: 12px;
 }
 
 .actions {
   display: flex;
-
   gap: 8px;
-
   flex-wrap: wrap;
 }
 
 .smallbtn {
   border: 0;
-
   border-radius: 9px;
-
   padding: 9px 12px;
-
   cursor: pointer;
-
   font-weight: 700;
 }
 
@@ -647,7 +545,6 @@ textarea {
 
 .delete {
   background: #f2dddd;
-
   color: #8a2e2e;
 }
 
@@ -657,36 +554,25 @@ textarea {
 
 .preview img {
   width: 130px;
-
   height: 100px;
-
   object-fit: cover;
-
   border-radius: 12px;
-
   margin-top: 10px;
 }
 
 /* =========================================================
    TABLET
-   769px - 900px
 ========================================================= */
 
 @media (max-width: 900px) {
 
   .section {
     padding-left: 5%;
-
     padding-right: 5%;
   }
 
-  /*
-    Tablet - 2 cards per row
-  */
-
   .cake-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-
     gap: 22px;
   }
 
@@ -705,20 +591,16 @@ textarea {
 
 /* =========================================================
    MOBILE
-   701px and below
 ========================================================= */
 
 @media (max-width: 700px) {
 
   body {
     width: 100%;
-
     overflow-x: hidden;
   }
 
-  /* =========================
-     HEADER
-  ========================= */
+  /* Header */
 
   header {
     padding: 13px 16px;
@@ -738,17 +620,13 @@ textarea {
 
   .admin-link {
     padding: 7px 10px;
-
     font-size: 12px;
   }
 
-  /* =========================
-     HERO
-  ========================= */
+  /* Hero */
 
   .hero {
     min-height: 68vh;
-
     padding: 55px 7%;
   }
 
@@ -758,16 +636,13 @@ textarea {
 
   .hero p:not(.eyebrow) {
     font-size: 16px;
-
     line-height: 1.6;
   }
 
-  /* =========================
-     SECTION
-  ========================= */
+  /* Section */
 
   .section {
-    padding: 55px 12px;
+    padding: 55px 16px;
   }
 
   .section-title {
@@ -781,163 +656,109 @@ textarea {
   }
 
   /* =====================================================
-     MOBILE CAKE GRID
-     2 CARDS PER ROW
+     IMPORTANT MOBILE CAKE SETTINGS
   ===================================================== */
 
   .cake-grid {
     display: grid;
 
     /*
-      Phone එකේ cards 2ක්
-      එක row එකකට
-    */
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 14px;
-
-    width: 100%;
-  }
-
-  /* =========================
-     MOBILE CAKE CARD
-  ========================= */
-
-  .cake-card {
-    width: 100%;
-
-    max-width: 100%;
-
-    min-width: 0;
-
-    border-radius: 16px;
-
-    overflow: hidden;
-  }
-
-  /* =========================
-     MOBILE CAKE IMAGE
-     4:5
-  ========================= */
-
-  .cake-card img {
-    width: 100%;
-
-    aspect-ratio: 4 / 5;
-
-    /*
-      Photo එක crop නොකර
-      සම්පූර්ණ cake එක පෙන්වයි.
-    */
-    object-fit: contain;
-
-    object-position: center;
-
-    background: #f8e9e8;
-
-    display: block;
-  }
-
-  /* =========================
-     MOBILE CAKE BODY
-  ========================= */
-
-  .cake-body {
-    padding: 12px 10px 12px;
-
-    width: 100%;
-
-    min-width: 0;
-  }
-
-  /* =========================
-     BADGE
-  ========================= */
-
-  .badge {
-    font-size: 9px;
-
-    padding: 4px 6px;
-
-    border-radius: 8px;
-  }
-
-  /* =========================
-     CAKE NAME
-  ========================= */
-
-  .cake-body h3 {
-    font-size: 15px;
-
-    line-height: 1.25;
-
-    margin: 7px 0 8px;
-
-    overflow-wrap: anywhere;
-
-    word-break: break-word;
-  }
-
-  /* =========================
-     MOBILE PRICES
-  ========================= */
-
-  .prices {
-    display: grid;
-
-    /*
-      Card width එක අඩු නිසා
-      prices එක යටින් යටට
-      පෙන්වයි.
+      One card per row.
+      This makes the cake card properly fit phone width.
     */
     grid-template-columns: 1fr;
 
-    gap: 6px;
+    gap: 24px;
+
+    width: 100%;
+  }
+
+  .cake-card {
+    width: 100%;
+    max-width: 100%;
+
+    border-radius: 18px;
+
+    /*
+      Extra space between cards
+    */
+    margin: 0 0 0 0;
+  }
+
+  /*
+    4:5 cake image on mobile
+  */
+
+  .cake-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+
+    /*
+      Full image visible.
+      No unnecessary crop.
+    */
+    object-fit: contain;
+
+    background: #f8e9e8;
+  }
+
+  .cake-body {
+    padding: 17px 16px 18px;
+    width: 100%;
+  }
+
+  .cake-body h3 {
+    font-size: 20px;
+    line-height: 1.3;
+
+    margin: 9px 0 8px;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Prices */
+
+  .prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
 
     width: 100%;
 
-    margin: 8px 0 10px;
+    margin: 12px 0 16px;
   }
 
   .price {
     width: 100%;
 
-    padding: 6px 5px;
+    padding: 9px 8px;
 
-    font-size: 11px;
-
-    line-height: 1.25;
+    font-size: 13px;
 
     text-align: center;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     overflow-wrap: anywhere;
-
-    word-break: break-word;
   }
 
-  /* =========================
-     MOBILE ORDER BUTTON
-  ========================= */
+  /* Order button */
 
   .cake-body .btn {
     width: 100%;
 
-    min-height: 40px;
+    min-height: 48px;
 
-    padding: 9px 5px;
+    padding: 13px 12px;
 
-    font-size: 11px;
+    font-size: 15px;
 
-    line-height: 1.2;
-
-    border-radius: 20px;
+    border-radius: 24px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     text-align: center;
@@ -945,19 +766,15 @@ textarea {
     white-space: normal;
   }
 
-  /* =========================
-     ABOUT
-  ========================= */
+  /* About */
 
   .about {
     grid-template-columns: 1fr;
-
     gap: 25px;
   }
 
   .about p:not(.eyebrow) {
     font-size: 16px;
-
     line-height: 1.7;
   }
 
@@ -965,19 +782,15 @@ textarea {
     padding: 35px 20px;
   }
 
-  /* =========================
-     MODAL
-  ========================= */
+  /* Modal */
 
   .modal {
     padding: 10px;
-
     align-items: center;
   }
 
   .modal-box {
     width: 100%;
-
     max-width: 100%;
 
     max-height: 94vh;
@@ -989,19 +802,16 @@ textarea {
 
   .modal-box h2 {
     font-size: 24px;
-
     padding-right: 30px;
   }
 
   .selected-cake {
     gap: 12px;
-
     padding: 10px;
   }
 
   .selected-cake img {
     width: 58px;
-
     height: 72px;
 
     aspect-ratio: 4 / 5;
@@ -1015,13 +825,10 @@ textarea {
 
   .full {
     min-height: 50px;
-
     font-size: 15px;
   }
 
-  /* =========================
-     ADMIN
-  ========================= */
+  /* Admin */
 
   .two {
     grid-template-columns: 1fr;
@@ -1038,67 +845,36 @@ textarea {
 
 /* =========================================================
    VERY SMALL PHONES
-   380px and below
 ========================================================= */
 
 @media (max-width: 380px) {
 
   .section {
-    padding-left: 10px;
-
-    padding-right: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
   }
-
-  /*
-    Small phone එකේත්
-    cards 2ක් එක row එකේ.
-  */
 
   .cake-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
-  }
-
-  .cake-card {
-    border-radius: 13px;
+    gap: 20px;
   }
 
   .cake-body {
-    padding: 10px 8px 10px;
+    padding: 15px 13px 16px;
   }
 
   .cake-body h3 {
-    font-size: 14px;
-
-    line-height: 1.2;
-  }
-
-  .badge {
-    font-size: 8px;
-
-    padding: 3px 5px;
+    font-size: 18px;
   }
 
   .prices {
-    gap: 5px;
-
-    margin: 7px 0 8px;
+    grid-template-columns: 1fr;
   }
 
   .price {
-    font-size: 10px;
-
-    padding: 5px 4px;
-
-    border-radius: 8px;
+    font-size: 13px;
   }
 
   .cake-body .btn {
-    min-height: 38px;
-
-    padding: 8px 3px;
-
-    font-size: 10px;
+    font-size: 14px;
   }
 }
