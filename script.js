@@ -1,38 +1,48 @@
 /* =========================================================
    RASHI ELEGANT CAKE
-   MAIN WEBSITE SCRIPT
 ========================================================= */
 
-let selectedCake = null;
+let selectedCakeData = null;
 
 
 /* =========================================================
-   FALLBACK IMAGE
+   MOBILE MENU
 ========================================================= */
 
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800";
+const menuBtn = document.getElementById("menuBtn");
+const mainNav = document.getElementById("mainNav");
 
+if (menuBtn) {
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+    menuBtn.addEventListener("click", function () {
 
-function esc(value) {
+        mainNav.classList.toggle("active");
 
-  return String(value ?? "").replace(/[&<>"']/g, function (m) {
+        if (mainNav.classList.contains("active")) {
+            menuBtn.textContent = "✕";
+        } else {
+            menuBtn.textContent = "☰";
+        }
 
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[m];
-
-  });
-
+    });
 }
+
+
+/* Close menu after clicking a link */
+
+document.querySelectorAll(".main-nav a").forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        mainNav.classList.remove("active");
+
+        if (menuBtn) {
+            menuBtn.textContent = "☰";
+        }
+
+    });
+
+});
 
 
 /* =========================================================
@@ -41,91 +51,45 @@ function esc(value) {
 
 async function loadCakes() {
 
-  const grid = document.getElementById("cakeGrid");
+    const cakeGrid = document.getElementById("cakeGrid");
 
-  if (!grid) return;
-
-  grid.innerHTML = `
-    <div class="loading-box">
-      <div class="loading-spinner"></div>
-      <p>Loading beautiful cakes...</p>
-    </div>
-  `;
-
-
-  /* -----------------------------------------
-     SUPABASE
-  ----------------------------------------- */
-
-  if (
-    typeof supabaseClient !== "undefined" &&
-    supabaseClient
-  ) {
+    if (!cakeGrid) return;
 
     try {
 
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("cakes")
-        .select("*")
-        .order("id", { ascending: false });
+        const { data, error } = await supabaseClient
+            .from("cakes")
+            .select("*")
+            .order("id", { ascending: false });
 
+        if (error) {
+            throw error;
+        }
 
-      if (!error && data) {
+        if (!data || data.length === 0) {
+
+            cakeGrid.innerHTML = `
+                <div class="loading">
+                    <p>No cakes available right now.</p>
+                </div>
+            `;
+
+            return;
+        }
 
         renderCakes(data);
 
-        return;
-      }
-
-      console.error("Supabase error:", error);
-
     } catch (error) {
 
-      console.error(
-        "Supabase loading error:",
-        error
-      );
+        console.error("Cake loading error:", error);
 
+        cakeGrid.innerHTML = `
+            <div class="loading">
+                <p>Unable to load cakes.</p>
+                <p>Please try again later.</p>
+            </div>
+        `;
     }
-
-  }
-
-
-  /* -----------------------------------------
-     LOCAL STORAGE FALLBACK
-  ----------------------------------------- */
-
-  try {
-
-    const localData =
-      localStorage.getItem("rashiCakes");
-
-    if (localData) {
-
-      renderCakes(JSON.parse(localData));
-
-      return;
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Local storage error:",
-      error
-    );
-
-  }
-
-
-  grid.innerHTML = `
-    <div class="loading-box">
-      <p>Unable to load cakes right now.</p>
-    </div>
-  `;
-
 }
 
 
@@ -135,409 +99,301 @@ async function loadCakes() {
 
 function renderCakes(cakes) {
 
-  const grid =
-    document.getElementById("cakeGrid");
+    const cakeGrid = document.getElementById("cakeGrid");
 
-  if (!grid) return;
+    cakeGrid.innerHTML = "";
 
+    cakes.forEach(function (cake) {
 
-  if (!cakes || !cakes.length) {
+        const imageUrl =
+            cake.image_url ||
+            "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800";
 
-    grid.innerHTML = `
-      <div class="loading-box">
-        <p>No cake designs available yet.</p>
-      </div>
-    `;
+        const price500 =
+            cake.price_500 !== null &&
+            cake.price_500 !== undefined
+                ? Number(cake.price_500)
+                : 0;
 
-    return;
-  }
+        const price1000 =
+            cake.price_1000 !== null &&
+            cake.price_1000 !== undefined
+                ? Number(cake.price_1000)
+                : 0;
 
-
-  grid.innerHTML = cakes.map(function (cake) {
-
-    const image =
-      cake.image_url &&
-      !cake.image_url.includes(
-        "cake-placeholder"
-      )
-        ? cake.image_url
-        : FALLBACK_IMAGE;
-
-
-    const price500 =
-      Number(
-        cake.price_500 ||
-        cake.p500 ||
-        0
-      );
+        const available =
+            cake.available === false
+                ? false
+                : true;
 
 
-    const price1000 =
-      Number(
-        cake.price_1000 ||
-        cake.p1000 ||
-        0
-      );
+        const safeCake = JSON.stringify({
+            id: cake.id,
+            name: cake.name || "Cake",
+            image_url: imageUrl,
+            price_500: price500,
+            price_1000: price1000,
+            available: available
+        })
+        .replace(/'/g, "&apos;");
 
 
-    const available =
-      cake.available !== undefined
-        ? cake.available
-        : true;
+        const card = document.createElement("div");
 
+        card.className = "cake-card";
 
-    return `
+        card.innerHTML = `
 
-      <article class="cake-card
-        ${available ? "" : "unavailable"}">
+            <div class="cake-image-wrap">
 
-        <img
-          src="${esc(image)}"
-          alt="${esc(cake.name)} cake"
-          loading="lazy"
-          onerror="this.src='${FALLBACK_IMAGE}'"
-        >
+                <img
+                    class="cake-image"
+                    src="${imageUrl}"
+                    alt="${escapeHtml(cake.name || "Cake")}"
+                    loading="lazy"
+                    onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800'"
+                >
 
-        <div class="cake-body">
-
-          <span class="badge">
-            ${available ? "AVAILABLE" : "UNAVAILABLE"}
-          </span>
-
-          <h3>
-            ${esc(cake.name)}
-          </h3>
-
-          <div class="prices">
-
-            <div class="price">
-              500g<br>
-              <strong>
-                Rs. ${price500.toLocaleString()}
-              </strong>
             </div>
 
-            <div class="price">
-              1KG<br>
-              <strong>
-                Rs. ${price1000.toLocaleString()}
-              </strong>
+
+            <div class="cake-info">
+
+                <div class="cake-name">
+                    ${escapeHtml(cake.name || "Beautiful Cake")}
+                </div>
+
+
+                <div class="cake-price">
+
+                    <span>
+                        500g:
+                        <strong>
+                            Rs. ${price500.toLocaleString()}
+                        </strong>
+                    </span>
+
+                    <span>
+                        1kg:
+                        <strong>
+                            Rs. ${price1000.toLocaleString()}
+                        </strong>
+                    </span>
+
+                </div>
+
+
+                <div class="cake-availability ${
+                    available ? "available" : "unavailable"
+                }">
+
+                    ${
+                        available
+                            ? "✓ Available"
+                            : "✕ Currently unavailable"
+                    }
+
+                </div>
+
+
+                <button
+                    class="order-btn"
+                    ${available ? "" : "disabled"}
+                    onclick='openOrder(${safeCake})'
+                >
+
+                    ${
+                        available
+                            ? "🛒 Order Now"
+                            : "Unavailable"
+                    }
+
+                </button>
+
             </div>
+        `;
 
-          </div>
 
-          ${
-            available
+        cakeGrid.appendChild(card);
 
-              ? `
-                <button
-                  class="btn primary-btn"
-                  onclick="openOrder(${JSON.stringify(cake).replace(/"/g, "&quot;")})">
-
-                  🎂 Order This Cake
-
-                </button>
-              `
-
-              : `
-                <button
-                  class="btn"
-                  disabled
-                  style="
-                    background:#ddd;
-                    color:#777;
-                    cursor:not-allowed;
-                    box-shadow:none;
-                  ">
-
-                  Currently Unavailable
-
-                </button>
-              `
-          }
-
-        </div>
-
-      </article>
-
-    `;
-
-  }).join("");
-
+    });
 }
 
 
 /* =========================================================
-   OPEN ORDER MODAL
+   OPEN ORDER
 ========================================================= */
 
 function openOrder(cake) {
 
-  selectedCake = cake;
+    selectedCakeData = cake;
 
+    const modal = document.getElementById("orderModal");
 
-  const modal =
-    document.getElementById("orderModal");
+    const modalCakeName =
+        document.getElementById("modalCakeName");
 
-  const selected =
-    document.getElementById("selectedCake");
+    const selectedCake =
+        document.getElementById("selectedCake");
 
-  const cakeName =
-    document.getElementById("cakeName");
+    modalCakeName.textContent =
+        cake.name || "Order Cake";
 
-  const weight =
-    document.getElementById("weight");
+    selectedCake.value =
+        cake.name || "";
 
+    modal.classList.add("active");
 
-  const image =
-    cake.image_url &&
-    !cake.image_url.includes(
-      "cake-placeholder"
-    )
-      ? cake.image_url
-      : FALLBACK_IMAGE;
+    document.body.style.overflow = "hidden";
 
+    updateTotal();
 
-  const price500 =
-    Number(
-      cake.price_500 ||
-      cake.p500 ||
-      0
-    );
+    setTimeout(function () {
 
+        const nameInput =
+            document.getElementById("customerName");
 
-  const price1000 =
-    Number(
-      cake.price_1000 ||
-      cake.p1000 ||
-      0
-    );
+        if (nameInput) {
+            nameInput.focus();
+        }
 
-
-  selected.innerHTML = `
-
-    <img
-      src="${esc(image)}"
-      alt="${esc(cake.name)}"
-      onerror="this.src='${FALLBACK_IMAGE}'"
-    >
-
-    <div>
-      <span class="eyebrow">
-        SELECTED CAKE
-      </span>
-
-      <br>
-
-      <b>
-        ${esc(cake.name)}
-      </b>
-    </div>
-
-  `;
-
-
-  cakeName.value =
-    cake.name || "";
-
-
-  weight.innerHTML = `
-
-    <option value="500g"
-      data-price="${price500}">
-      500g - Rs. ${price500.toLocaleString()}
-    </option>
-
-    <option value="1KG"
-      data-price="${price1000}">
-      1KG - Rs. ${price1000.toLocaleString()}
-    </option>
-
-  `;
-
-
-  updateTotal();
-
-
-  modal.classList.remove("hidden");
-
-  document.body.style.overflow = "hidden";
-
+    }, 200);
 }
 
 
 /* =========================================================
-   CLOSE ORDER MODAL
+   CLOSE ORDER
 ========================================================= */
 
 function closeOrder() {
 
-  const modal =
-    document.getElementById("orderModal");
+    const modal =
+        document.getElementById("orderModal");
 
-  if (!modal) return;
+    modal.classList.remove("active");
 
-  modal.classList.add("hidden");
-
-  document.body.style.overflow = "";
+    document.body.style.overflow = "";
 
 }
 
 
 /* =========================================================
-   UPDATE PRICE
+   UPDATE TOTAL
 ========================================================= */
 
 function updateTotal() {
 
-  const weight =
-    document.getElementById("weight");
+    if (!selectedCakeData) return;
 
-  const total =
-    document.getElementById("total");
+    const weight =
+        document.getElementById("cakeWeight").value;
 
+    let price = 0;
 
-  if (!weight || !total) return;
+    if (weight === "500g") {
 
+        price =
+            Number(selectedCakeData.price_500 || 0);
 
-  const option =
-    weight.options[
-      weight.selectedIndex
-    ];
+    }
 
+    if (weight === "1kg") {
 
-  const price =
-    Number(
-      option?.dataset.price || 0
-    );
+        price =
+            Number(selectedCakeData.price_1000 || 0);
 
+    }
 
-  total.innerHTML = `
-    Total Price:
-    <strong>
-      Rs. ${price.toLocaleString()}
-    </strong>
-  `;
+    document.getElementById("totalPrice").textContent =
+        "Rs. " + price.toLocaleString();
 
 }
 
 
 /* =========================================================
-   FORM SUBMIT
+   WEIGHT CHANGE
 ========================================================= */
 
-async function submitOrder(event) {
+const cakeWeight =
+    document.getElementById("cakeWeight");
 
-  event.preventDefault();
+if (cakeWeight) {
 
-
-  if (!selectedCake) {
-
-    alert("Please select a cake first.");
-
-    return;
-  }
-
-
-  const customerName =
-    document
-      .getElementById("customerName")
-      .value
-      .trim();
-
-
-  const customerPhone =
-    document
-      .getElementById("customerPhone")
-      .value
-      .trim();
-
-
-  const cakeName =
-    document
-      .getElementById("cakeName")
-      .value
-      .trim();
-
-
-  const weight =
-    document
-      .getElementById("weight")
-      .value;
-
-
-  const date =
-    document
-      .getElementById("date")
-      .value;
-
-
-  const time =
-    document
-      .getElementById("time")
-      .value;
-
-
-  const message =
-    document
-      .getElementById("message")
-      .value
-      .trim();
-
-
-  const address =
-    document
-      .getElementById("address")
-      .value
-      .trim();
-
-
-  const weightSelect =
-    document.getElementById("weight");
-
-
-  const selectedOption =
-    weightSelect.options[
-      weightSelect.selectedIndex
-    ];
-
-
-  const price =
-    Number(
-      selectedOption?.dataset.price || 0
+    cakeWeight.addEventListener(
+        "change",
+        updateTotal
     );
 
-
-  if (!customerName ||
-      !customerPhone ||
-      !date ||
-      !time ||
-      !address) {
-
-    alert(
-      "Please fill in all required details."
-    );
-
-    return;
-  }
+}
 
 
-  /* -----------------------------------------
-     WHATSAPP MESSAGE
-  ----------------------------------------- */
+/* =========================================================
+   SUBMIT ORDER
+========================================================= */
 
-  const text =
+const orderForm =
+    document.getElementById("orderForm");
 
-`🎂 *NEW CAKE ORDER*
+if (orderForm) {
+
+    orderForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            if (!selectedCakeData) return;
+
+
+            const customerName =
+                document.getElementById("customerName").value.trim();
+
+            const customerPhone =
+                document.getElementById("customerPhone").value.trim();
+
+            const weight =
+                document.getElementById("cakeWeight").value;
+
+            const requiredDate =
+                document.getElementById("requiredDate").value;
+
+            const requiredTime =
+                document.getElementById("requiredTime").value;
+
+            const cakeMessage =
+                document.getElementById("cakeMessage").value.trim();
+
+            const deliveryDetails =
+                document.getElementById("deliveryDetails").value.trim();
+
+
+            let price = 0;
+
+            if (weight === "500g") {
+                price = Number(
+                    selectedCakeData.price_500 || 0
+                );
+            }
+
+            if (weight === "1kg") {
+                price = Number(
+                    selectedCakeData.price_1000 || 0
+                );
+            }
+
+
+            const text =
+
+`🍰 *NEW CAKE ORDER*
 
 👤 Customer Name:
 ${customerName}
 
-📱 Contact Number:
+📞 Contact:
 ${customerPhone}
 
-🎂 Cake Design:
-${cakeName}
+🎂 Cake:
+${selectedCakeData.name}
 
 ⚖️ Weight:
 ${weight}
@@ -546,171 +402,161 @@ ${weight}
 Rs. ${price.toLocaleString()}
 
 📅 Required Date:
-${date}
+${requiredDate}
 
 ⏰ Required Time:
-${time}
+${requiredTime}
 
-📝 Cake Writing / Special Message:
-${message || "None"}
+✍️ Cake Writing / Special Message:
+${cakeMessage || "None"}
 
 📍 Pickup / Delivery Details:
-${address}
+${deliveryDetails || "Not specified"}
 
-━━━━━━━━━━━━━━
-🍰 Rashi Elegant Cake
-Thank you for your order! 💗`;
+Thank you! ❤️`;
 
 
-  const whatsappURL =
-    "https://wa.me/94768727152?text=" +
-    encodeURIComponent(text);
+            const whatsappUrl =
+                "https://wa.me/94768727152?text=" +
+                encodeURIComponent(text);
 
 
-  window.open(
-    whatsappURL,
-    "_blank"
-  );
+            window.open(
+                whatsappUrl,
+                "_blank"
+            );
+
+
+            closeOrder();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   DATE MINIMUM = TODAY
+========================================================= */
+
+const requiredDate =
+    document.getElementById("requiredDate");
+
+if (requiredDate) {
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    requiredDate.min = today;
 
 }
 
 
 /* =========================================================
-   EVENT LISTENERS
+   MODAL BACKGROUND CLICK
 ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
+const orderModal =
+    document.getElementById("orderModal");
 
+if (orderModal) {
 
-    /* Load cakes */
-
-    loadCakes();
-
-
-    /* Weight price */
-
-    const weight =
-      document.getElementById("weight");
-
-    if (weight) {
-
-      weight.addEventListener(
-        "change",
-        updateTotal
-      );
-
-    }
-
-
-    /* Order form */
-
-    const form =
-      document.getElementById("orderForm");
-
-    if (form) {
-
-      form.addEventListener(
-        "submit",
-        submitOrder
-      );
-
-    }
-
-
-    /* Modal background click */
-
-    const modal =
-      document.getElementById("orderModal");
-
-    if (modal) {
-
-      modal.addEventListener(
+    orderModal.addEventListener(
         "click",
         function (event) {
 
-          if (
-            event.target === modal
-          ) {
-
-            closeOrder();
-
-          }
+            if (event.target === orderModal) {
+                closeOrder();
+            }
 
         }
-      );
-
-    }
-
-
-    /* Back to top */
-
-    const backTop =
-      document.getElementById("backTop");
-
-    window.addEventListener(
-      "scroll",
-      function () {
-
-        if (!backTop) return;
-
-        if (window.scrollY > 500) {
-
-          backTop.style.display =
-            "flex";
-
-        } else {
-
-          backTop.style.display =
-            "none";
-
-        }
-
-      }
     );
+}
 
 
-    if (backTop) {
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
 
-      backTop.style.display = "none";
+document.addEventListener(
+    "keydown",
+    function (event) {
 
-    }
-
-
-    /* Today's date as minimum date */
-
-    const dateInput =
-      document.getElementById("date");
-
-    if (dateInput) {
-
-      const today =
-        new Date()
-          .toISOString()
-          .split("T")[0];
-
-      dateInput.min = today;
+        if (event.key === "Escape") {
+            closeOrder();
+        }
 
     }
-
-  }
 );
 
 
 /* =========================================================
-   ESC KEY CLOSE MODAL
+   BACK TO TOP
+========================================================= */
+
+const backToTop =
+    document.getElementById("backToTop");
+
+
+window.addEventListener(
+    "scroll",
+    function () {
+
+        if (window.scrollY > 400) {
+
+            backToTop.classList.add("show");
+
+        } else {
+
+            backToTop.classList.remove("show");
+
+        }
+
+    },
+    { passive: true }
+);
+
+
+if (backToTop) {
+
+    backToTop.addEventListener(
+        "click",
+        function () {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   START
 ========================================================= */
 
 document.addEventListener(
-  "keydown",
-  function (event) {
+    "DOMContentLoaded",
+    function () {
 
-    if (event.key === "Escape") {
-
-      closeOrder();
+        loadCakes();
 
     }
-
-  }
 );
