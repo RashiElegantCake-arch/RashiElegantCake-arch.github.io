@@ -34,7 +34,9 @@ document.querySelectorAll(".main-nav a").forEach(function (link) {
 
     link.addEventListener("click", function () {
 
-        mainNav.classList.remove("active");
+        if (mainNav) {
+            mainNav.classList.remove("active");
+        }
 
         if (menuBtn) {
             menuBtn.textContent = "☰";
@@ -101,6 +103,8 @@ function renderCakes(cakes) {
 
     const cakeGrid = document.getElementById("cakeGrid");
 
+    if (!cakeGrid) return;
+
     cakeGrid.innerHTML = "";
 
     cakes.forEach(function (cake) {
@@ -134,8 +138,7 @@ function renderCakes(cakes) {
             price_500: price500,
             price_1000: price1000,
             available: available
-        })
-        .replace(/'/g, "&apos;");
+        }).replace(/'/g, "&apos;");
 
 
         const card = document.createElement("div");
@@ -148,7 +151,7 @@ function renderCakes(cakes) {
 
                 <img
                     class="cake-image"
-                    src="${imageUrl}"
+                    src="${escapeHtml(imageUrl)}"
                     alt="${escapeHtml(cake.name || "Cake")}"
                     loading="lazy"
                     onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800'"
@@ -228,7 +231,8 @@ function openOrder(cake) {
 
     selectedCakeData = cake;
 
-    const modal = document.getElementById("orderModal");
+    const modal =
+        document.getElementById("orderModal");
 
     const modalCakeName =
         document.getElementById("modalCakeName");
@@ -236,11 +240,17 @@ function openOrder(cake) {
     const selectedCake =
         document.getElementById("selectedCake");
 
-    modalCakeName.textContent =
-        cake.name || "Order Cake";
+    if (!modal) return;
 
-    selectedCake.value =
-        cake.name || "";
+    if (modalCakeName) {
+        modalCakeName.textContent =
+            cake.name || "Order Cake";
+    }
+
+    if (selectedCake) {
+        selectedCake.value =
+            cake.name || "";
+    }
 
     modal.classList.add("active");
 
@@ -270,6 +280,8 @@ function closeOrder() {
     const modal =
         document.getElementById("orderModal");
 
+    if (!modal) return;
+
     modal.classList.remove("active");
 
     document.body.style.overflow = "";
@@ -285,8 +297,16 @@ function updateTotal() {
 
     if (!selectedCakeData) return;
 
+    const weightElement =
+        document.getElementById("cakeWeight");
+
+    const totalElement =
+        document.getElementById("totalPrice");
+
+    if (!weightElement || !totalElement) return;
+
     const weight =
-        document.getElementById("cakeWeight").value;
+        weightElement.value;
 
     let price = 0;
 
@@ -304,7 +324,7 @@ function updateTotal() {
 
     }
 
-    document.getElementById("totalPrice").textContent =
+    totalElement.textContent =
         "Rs. " + price.toLocaleString();
 
 }
@@ -342,45 +362,122 @@ if (orderForm) {
 
             event.preventDefault();
 
-            if (!selectedCakeData) return;
+            if (!selectedCakeData) {
+                alert("Please select a cake first.");
+                return;
+            }
+
+
+            const customerNameElement =
+                document.getElementById("customerName");
+
+            const customerPhoneElement =
+                document.getElementById("customerPhone");
+
+            const weightElement =
+                document.getElementById("cakeWeight");
+
+            const requiredDateElement =
+                document.getElementById("requiredDate");
+
+            const requiredTimeElement =
+                document.getElementById("requiredTime");
+
+            const cakeMessageElement =
+                document.getElementById("cakeMessage");
+
+            const deliveryDetailsElement =
+                document.getElementById("deliveryDetails");
 
 
             const customerName =
-                document.getElementById("customerName").value.trim();
+                customerNameElement
+                    ? customerNameElement.value.trim()
+                    : "";
 
             const customerPhone =
-                document.getElementById("customerPhone").value.trim();
+                customerPhoneElement
+                    ? customerPhoneElement.value.trim()
+                    : "";
 
             const weight =
-                document.getElementById("cakeWeight").value;
+                weightElement
+                    ? weightElement.value
+                    : "";
 
             const requiredDate =
-                document.getElementById("requiredDate").value;
+                requiredDateElement
+                    ? requiredDateElement.value
+                    : "";
 
             const requiredTime =
-                document.getElementById("requiredTime").value;
+                requiredTimeElement
+                    ? requiredTimeElement.value
+                    : "";
 
             const cakeMessage =
-                document.getElementById("cakeMessage").value.trim();
+                cakeMessageElement
+                    ? cakeMessageElement.value.trim()
+                    : "";
 
             const deliveryDetails =
-                document.getElementById("deliveryDetails").value.trim();
+                deliveryDetailsElement
+                    ? deliveryDetailsElement.value.trim()
+                    : "";
 
+
+            /* =================================================
+               CALCULATE PRICE
+            ================================================= */
 
             let price = 0;
 
             if (weight === "500g") {
-                price = Number(
-                    selectedCakeData.price_500 || 0
-                );
+
+                price =
+                    Number(
+                        selectedCakeData.price_500 || 0
+                    );
+
             }
 
             if (weight === "1kg") {
-                price = Number(
-                    selectedCakeData.price_1000 || 0
-                );
+
+                price =
+                    Number(
+                        selectedCakeData.price_1000 || 0
+                    );
+
             }
 
+
+            /* =================================================
+               CAKE IMAGE LINK
+            ================================================= */
+
+            const cakeImageUrl =
+                selectedCakeData.image_url || "";
+
+
+            /*
+               If cake image exists, add clickable link.
+               If not, show unavailable message.
+            */
+
+            let cakePhotoText = "Not available";
+
+            if (cakeImageUrl) {
+
+                cakePhotoText =
+                    `📸 View Cake Design:
+${cakeImageUrl}`;
+
+            }
+
+
+            /* =================================================
+               WHATSAPP MESSAGE
+            ================================================= */
 
             const text =
 
@@ -413,8 +510,14 @@ ${cakeMessage || "None"}
 📍 Pickup / Delivery Details:
 ${deliveryDetails || "Not specified"}
 
+${cakePhotoText}
+
 Thank you! ❤️`;
 
+
+            /* =================================================
+               WHATSAPP
+            ================================================= */
 
             const whatsappUrl =
                 "https://wa.me/94768727152?text=" +
@@ -438,15 +541,30 @@ Thank you! ❤️`;
    DATE MINIMUM = TODAY
 ========================================================= */
 
-const requiredDate =
+const requiredDateInput =
     document.getElementById("requiredDate");
 
-if (requiredDate) {
+if (requiredDateInput) {
+
+    /*
+       Sri Lanka local date
+    */
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(now.getDate()).padStart(2, "0");
 
     const today =
-        new Date().toISOString().split("T")[0];
+        `${year}-${month}-${day}`;
 
-    requiredDate.min = today;
+    requiredDateInput.min = today;
 
 }
 
@@ -465,7 +583,9 @@ if (orderModal) {
         function (event) {
 
             if (event.target === orderModal) {
+
                 closeOrder();
+
             }
 
         }
@@ -482,7 +602,9 @@ document.addEventListener(
     function (event) {
 
         if (event.key === "Escape") {
+
             closeOrder();
+
         }
 
     }
@@ -497,26 +619,26 @@ const backToTop =
     document.getElementById("backToTop");
 
 
-window.addEventListener(
-    "scroll",
-    function () {
-
-        if (window.scrollY > 400) {
-
-            backToTop.classList.add("show");
-
-        } else {
-
-            backToTop.classList.remove("show");
-
-        }
-
-    },
-    { passive: true }
-);
-
-
 if (backToTop) {
+
+    window.addEventListener(
+        "scroll",
+        function () {
+
+            if (window.scrollY > 400) {
+
+                backToTop.classList.add("show");
+
+            } else {
+
+                backToTop.classList.remove("show");
+
+            }
+
+        },
+        { passive: true }
+    );
+
 
     backToTop.addEventListener(
         "click",
