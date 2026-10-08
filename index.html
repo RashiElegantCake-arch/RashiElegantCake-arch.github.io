@@ -16,7 +16,8 @@
     <title>Rashi Elegant Cake</title>
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css?v=11">
+    <!-- v=12 forces browser to load latest CSS -->
+    <link rel="stylesheet" href="style.css?v=12">
 
 </head>
 
@@ -31,6 +32,7 @@
 <header class="site-header">
 
     <div class="header-inner">
+
 
         <!-- BRAND -->
 
@@ -55,7 +57,10 @@
         </a>
 
 
-        <!-- MOBILE MENU BUTTON -->
+        <!--
+            Hamburger button is kept for compatibility
+            but CSS will hide it on phone.
+        -->
 
         <button
             class="menu-btn"
@@ -96,6 +101,7 @@
             </a>
 
         </nav>
+
 
     </div>
 
@@ -212,6 +218,7 @@
 
         </div>
 
+
     </div>
 
 </section>
@@ -295,8 +302,7 @@
 
 
         <!--
-            CAKES WILL BE LOADED
-            FROM SUPABASE
+            Cakes will be loaded from Supabase
         -->
 
         <div
@@ -318,6 +324,7 @@
 
 
         </div>
+
 
     </div>
 
@@ -570,6 +577,7 @@
 
         </div>
 
+
     </div>
 
 </section>
@@ -620,6 +628,7 @@
 
 
         </div>
+
 
     </div>
 
@@ -748,6 +757,7 @@
 
 
         </div>
+
 
     </div>
 
@@ -1043,7 +1053,10 @@
                     rows="3"
                     placeholder="Enter pickup or delivery address"></textarea>
 
+
             </div>
+
+
 
             <!-- TOTAL -->
 
@@ -1076,6 +1089,7 @@
 
 
         </form>
+
 
     </div>
 
