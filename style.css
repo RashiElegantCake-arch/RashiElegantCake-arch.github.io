@@ -1,6 +1,6 @@
 /* =========================================================
    RASHI ELEGANT CAKE
-   CLEAN RESPONSIVE CSS
+   FULL RESPONSIVE STYLE
 ========================================================= */
 
 * {
@@ -14,9 +14,10 @@ html {
 }
 
 body {
+    margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #fff9fa;
     color: #34262a;
+    background: #fff9fa;
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -26,8 +27,12 @@ img {
     display: block;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 button,
-a,
 input,
 select,
 textarea {
@@ -39,18 +44,18 @@ a {
     -webkit-tap-highlight-color: transparent;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 button {
     cursor: pointer;
 }
 
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
 .container {
     width: min(1180px, calc(100% - 28px));
-    margin: auto;
+    margin: 0 auto;
 }
 
 .section {
@@ -73,14 +78,15 @@ button {
 
     border-bottom: 1px solid #f1dfe4;
 
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    box-shadow:
+        0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
 .header-inner {
     width: min(1180px, calc(100% - 24px));
     min-height: 68px;
 
-    margin: auto;
+    margin: 0 auto;
 
     display: flex;
     align-items: center;
@@ -91,6 +97,8 @@ button {
     display: flex;
     align-items: center;
     gap: 9px;
+
+    flex-shrink: 0;
 }
 
 .brand-icon {
@@ -101,6 +109,7 @@ button {
     place-items: center;
 
     background: #fff0f3;
+
     border-radius: 12px;
 
     font-size: 22px;
@@ -114,18 +123,20 @@ button {
 }
 
 .brand-text strong {
-    font-size: 17px;
     color: #7e3048;
+
+    font-size: 17px;
 }
 
 .brand-text span {
-    font-size: 11px;
     color: #a36a78;
+
+    font-size: 11px;
 }
 
 
 /* =========================================================
-   MOBILE MENU BUTTON
+   MENU BUTTON
 ========================================================= */
 
 .menu-btn {
@@ -146,27 +157,28 @@ button {
 
 
 /* =========================================================
-   MOBILE NAVIGATION
+   NAVIGATION - DEFAULT MOBILE
 ========================================================= */
 
 .main-nav {
     position: absolute;
 
+    top: 65px;
     left: 12px;
     right: 12px;
-    top: 65px;
 
     display: none;
     flex-direction: column;
+
+    padding: 10px;
 
     background: white;
 
     border: 1px solid #f1dfe4;
     border-radius: 16px;
 
-    padding: 10px;
-
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
 .main-nav.active {
@@ -184,10 +196,11 @@ button {
     border-radius: 10px;
 
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
-.main-nav a:active {
+.main-nav a:hover {
+    color: #7e3048;
     background: #fff0f3;
 }
 
@@ -239,13 +252,12 @@ button {
 
     width: min(1180px, calc(100% - 28px));
 
-    margin: auto;
+    margin: 0 auto;
 
     padding: 55px 0 45px;
 }
 
-.hero-small,
-.section-label {
+.hero-small {
     color: #a34d67;
 
     font-size: 11px;
@@ -258,13 +270,13 @@ button {
 .hero h1 {
     margin-top: 14px;
 
-    font-family: Georgia, serif;
+    font-family: Georgia, "Times New Roman", serif;
+
+    color: #572534;
 
     font-size: clamp(38px, 10vw, 72px);
 
     line-height: 1.05;
-
-    color: #572534;
 }
 
 .hero h1 span {
@@ -302,9 +314,8 @@ button {
 
     border-radius: 14px;
 
-    font-weight: 700;
-
     font-size: 15px;
+    font-weight: 700;
 }
 
 .btn-primary {
@@ -315,6 +326,11 @@ button {
 .btn-whatsapp {
     background: #25d366;
     color: white;
+}
+
+.btn-white {
+    background: white;
+    color: #7e3048;
 }
 
 .hero-features {
@@ -349,6 +365,25 @@ button {
 
 
 /* =========================================================
+   SECTION LABEL
+========================================================= */
+
+.section-label {
+    color: #a34d67;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.section-label.light {
+    color: #ffd9e3;
+}
+
+
+/* =========================================================
    WELCOME
 ========================================================= */
 
@@ -357,11 +392,11 @@ button {
 }
 
 .welcome-box {
-    text-align: center;
-
     max-width: 720px;
 
-    margin: auto;
+    margin: 0 auto;
+
+    text-align: center;
 }
 
 .welcome-box h2,
@@ -369,7 +404,7 @@ button {
 .about-text h2 {
     margin-top: 9px;
 
-    font-family: Georgia, serif;
+    font-family: Georgia, "Times New Roman", serif;
 
     color: #572534;
 
@@ -400,11 +435,11 @@ button {
 ========================================================= */
 
 .section-heading {
-    text-align: center;
-
     max-width: 700px;
 
     margin: 0 auto 30px;
+
+    text-align: center;
 }
 
 .section-heading p:last-child {
@@ -433,17 +468,16 @@ button {
 }
 
 .cake-card {
+    overflow: hidden;
+
     background: white;
 
     border: 1px solid #f0e1e5;
 
     border-radius: 16px;
 
-    overflow: hidden;
-
     box-shadow:
-        0 5px 18px
-        rgba(104, 53, 68, 0.07);
+        0 5px 18px rgba(104, 53, 68, 0.07);
 }
 
 .cake-image-wrap {
@@ -451,23 +485,22 @@ button {
 
     aspect-ratio: 4 / 5;
 
-    background: #fff7f8;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     overflow: hidden;
+
+    background: #fff7f8;
 }
 
 .cake-image {
     width: 100%;
     height: 100%;
 
-    object-fit: contain;
-
     padding: 5px;
+
+    object-fit: contain;
 }
 
 .cake-info {
@@ -475,31 +508,30 @@ button {
 }
 
 .cake-name {
+    min-height: 37px;
+
+    color: #4c3038;
+
     font-size: 14px;
 
     font-weight: 800;
 
     line-height: 1.3;
 
-    color: #4c3038;
-
-    min-height: 37px;
-
     overflow-wrap: anywhere;
 }
 
 .cake-price {
-    margin-top: 9px;
-
     display: flex;
-
     flex-direction: column;
 
     gap: 2px;
 
-    font-size: 12px;
+    margin-top: 9px;
 
     color: #795e66;
+
+    font-size: 12px;
 }
 
 .cake-price strong {
@@ -532,7 +564,6 @@ button {
     margin-top: 11px;
 
     border: 0;
-
     border-radius: 11px;
 
     background: #7e3048;
@@ -540,7 +571,6 @@ button {
     color: white;
 
     font-size: 14px;
-
     font-weight: 800;
 }
 
@@ -548,19 +578,24 @@ button {
     transform: scale(0.98);
 }
 
+
+/* =========================================================
+   LOADING
+========================================================= */
+
 .loading {
     grid-column: 1 / -1;
 
-    text-align: center;
-
     padding: 50px 10px;
+
+    text-align: center;
 }
 
 .loading-spinner {
     width: 35px;
     height: 35px;
 
-    margin: auto auto 12px;
+    margin: 0 auto 12px;
 
     border: 4px solid #f3dce3;
 
@@ -579,7 +614,7 @@ button {
 
 
 /* =========================================================
-   WHY US
+   WHY CHOOSE US
 ========================================================= */
 
 .why-section {
@@ -654,15 +689,14 @@ button {
 .about-card {
     padding: 35px 20px;
 
-    text-align: center;
-
     background: white;
 
     border-radius: 20px;
 
+    text-align: center;
+
     box-shadow:
-        0 8px 25px
-        rgba(104, 53, 68, 0.08);
+        0 8px 25px rgba(104, 53, 68, 0.08);
 }
 
 .about-big-icon {
@@ -674,7 +708,7 @@ button {
 
     color: #7e3048;
 
-    font-family: Georgia, serif;
+    font-family: Georgia, "Times New Roman", serif;
 
     font-size: 23px;
 }
@@ -703,8 +737,6 @@ button {
 .review-placeholder {
     padding: 25px;
 
-    text-align: center;
-
     background: #fff8fa;
 
     border: 1px dashed #dfbfc8;
@@ -712,6 +744,8 @@ button {
     border-radius: 15px;
 
     color: #7d646b;
+
+    text-align: center;
 }
 
 .review-card {
@@ -748,7 +782,7 @@ button {
 
 
 /* =========================================================
-   CTA
+   ORDER CTA
 ========================================================= */
 
 .order-cta {
@@ -767,14 +801,10 @@ button {
     gap: 22px;
 }
 
-.light {
-    color: #ffd9e3;
-}
-
 .cta-content h2 {
     margin-top: 8px;
 
-    font-family: Georgia, serif;
+    font-family: Georgia, "Times New Roman", serif;
 
     font-size: 30px;
 
@@ -785,12 +815,6 @@ button {
     margin-top: 9px;
 
     color: #f8dfe5;
-}
-
-.btn-white {
-    background: white;
-
-    color: #7e3048;
 }
 
 
@@ -877,9 +901,9 @@ button {
 .footer p {
     margin-top: 8px;
 
-    font-size: 12px;
-
     color: #d9bcc4;
+
+    font-size: 12px;
 }
 
 .copyright {
@@ -895,7 +919,6 @@ button {
     position: fixed;
 
     right: 15px;
-
     bottom: 18px;
 
     z-index: 1500;
@@ -913,11 +936,10 @@ button {
 
     border-radius: 50%;
 
-    box-shadow:
-        0 7px 25px
-        rgba(0, 0, 0, 0.22);
-
     font-size: 28px;
+
+    box-shadow:
+        0 7px 25px rgba(0, 0, 0, 0.22);
 }
 
 .floating-whatsapp:active {
@@ -933,7 +955,6 @@ button {
     position: fixed;
 
     right: 17px;
-
     bottom: 88px;
 
     z-index: 1400;
@@ -941,8 +962,11 @@ button {
     width: 43px;
     height: 43px;
 
-    border: 0;
+    display: none;
 
+    place-items: center;
+
+    border: 0;
     border-radius: 50%;
 
     background: #7e3048;
@@ -950,10 +974,6 @@ button {
     color: white;
 
     font-size: 20px;
-
-    display: none;
-
-    place-items: center;
 }
 
 .back-to-top.show {
@@ -974,16 +994,15 @@ button {
 
     display: none;
 
-    background: rgba(35, 18, 23, 0.65);
-
     padding: 0;
+
+    background: rgba(35, 18, 23, 0.65);
 }
 
 .modal.active {
     display: flex;
 
     align-items: flex-end;
-
     justify-content: center;
 }
 
@@ -996,29 +1015,26 @@ button {
 
     overflow-y: auto;
 
+    padding: 25px 18px 30px;
+
     background: #fffafa;
 
     border-radius: 22px 22px 0 0;
 
-    padding: 25px 18px 30px;
-
     box-shadow:
-        0 -10px 40px
-        rgba(0, 0, 0, 0.2);
+        0 -10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .modal-close {
     position: absolute;
 
     top: 12px;
-
     right: 12px;
 
     width: 44px;
     height: 44px;
 
     border: 0;
-
     border-radius: 50%;
 
     background: #f9e8ed;
@@ -1037,14 +1053,19 @@ button {
 .modal-header h2 {
     margin-top: 5px;
 
-    font-family: Georgia, serif;
-
     color: #572534;
+
+    font-family: Georgia, "Times New Roman", serif;
 
     font-size: 27px;
 
     overflow-wrap: anywhere;
 }
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .form-group {
     margin-bottom: 15px;
@@ -1071,17 +1092,17 @@ button {
 
     padding: 12px 13px;
 
+    outline: none;
+
+    background: white;
+
     border: 1px solid #e6d4da;
 
     border-radius: 12px;
 
-    background: white;
-
     color: #38272c;
 
     font-size: 16px;
-
-    outline: none;
 }
 
 .form-group textarea {
@@ -1097,17 +1118,15 @@ button {
 }
 
 .total-box {
-    margin-top: 8px;
+    display: flex;
 
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 8px;
     margin-bottom: 15px;
 
     padding: 15px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
 
     background: #fff0f3;
 
@@ -1126,7 +1145,6 @@ button {
     min-height: 55px;
 
     border: 0;
-
     border-radius: 14px;
 
     background: #25d366;
@@ -1134,64 +1152,138 @@ button {
     color: white;
 
     font-size: 15px;
-
     font-weight: 800;
 }
 
 
 /* =========================================================
    MOBILE
-   0 - 599px
+   UP TO 599px
 ========================================================= */
 
 @media screen and (max-width: 599px) {
 
-    /* HEADER */
+    /* ---------------------------------------------
+       HEADER
+    --------------------------------------------- */
 
     .site-header {
-        min-height: 60px;
+        min-height: 55px;
     }
 
     .header-inner {
-        min-height: 60px;
+        min-height: 55px;
+
+        width: calc(100% - 8px);
+    }
+
+    .brand {
+        gap: 4px;
     }
 
     .brand-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-        border-radius: 10px;
+        width: 30px;
+        height: 30px;
+
+        font-size: 16px;
+
+        border-radius: 8px;
     }
 
     .brand-text strong {
-        font-size: 16px;
+        font-size: 13px;
     }
 
     .brand-text span {
-        font-size: 10px;
+        font-size: 8px;
     }
 
+
+    /* ---------------------------------------------
+       PHONE NAVIGATION
+       NO HAMBURGER
+    --------------------------------------------- */
+
     .menu-btn {
-        width: 42px;
-        height: 42px;
-        font-size: 22px;
+        display: none !important;
     }
 
     .main-nav {
-        top: 64px;
-        left: 10px;
-        right: 10px;
+        position: static !important;
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        align-items: center;
+        justify-content: flex-end;
+
+        width: auto;
+
+        gap: 0;
+
+        padding: 0 !important;
+        margin: 0;
+
+        background: transparent !important;
+
+        border: 0 !important;
+        border-radius: 0 !important;
+
+        box-shadow: none !important;
+
+        overflow: visible;
+    }
+
+    .main-nav.active {
+        display: flex !important;
+    }
+
+    .main-nav a {
+        min-height: 38px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 6px !important;
+
+        background: transparent !important;
+
+        border-radius: 0;
+
+        white-space: nowrap;
+
+        color: #34262a;
+
+        font-size: 11px !important;
+
+        font-weight: 700;
+    }
+
+    .main-nav a:hover {
+        background: transparent !important;
+
+        color: #7e3048;
+    }
+
+    .main-nav .admin-link {
+        color: #7e3048;
     }
 
 
-    /* ================================================
-       HERO - VERY COMPACT
-    ================================================ */
+    /* ---------------------------------------------
+       HERO - SHORT
+    --------------------------------------------- */
 
     .hero {
         min-height: 0 !important;
+
         height: auto !important;
+
         display: block !important;
+
         padding: 0 !important;
     }
 
@@ -1203,7 +1295,9 @@ button {
 
     .hero-small {
         font-size: 8px;
+
         letter-spacing: 1px;
+
         line-height: 1.2;
     }
 
@@ -1226,7 +1320,9 @@ button {
     }
 
 
-    /* HERO BUTTONS */
+    /* ---------------------------------------------
+       HERO BUTTONS
+    --------------------------------------------- */
 
     .hero-buttons {
         flex-direction: row;
@@ -1249,7 +1345,9 @@ button {
     }
 
 
-    /* HERO FEATURES */
+    /* ---------------------------------------------
+       HERO FEATURES
+    --------------------------------------------- */
 
     .hero-features {
         margin-top: 12px;
@@ -1259,6 +1357,7 @@ button {
 
     .hero-features strong {
         font-size: 16px;
+
         line-height: 1;
     }
 
@@ -1271,20 +1370,17 @@ button {
     }
 
 
-    /* ================================================
-       WELCOME - COMPACT
-    ================================================ */
+    /* ---------------------------------------------
+       WELCOME - SHORT
+    --------------------------------------------- */
 
     .welcome {
         padding: 18px 0;
     }
 
-    .welcome-box {
-        max-width: 100%;
-    }
-
     .welcome-box .section-label {
         font-size: 8px;
+
         letter-spacing: 1.5px;
     }
 
@@ -1311,9 +1407,9 @@ button {
     }
 
 
-    /* ================================================
-       CAKES - APPEAR QUICKLY
-    ================================================ */
+    /* ---------------------------------------------
+       CAKES
+    --------------------------------------------- */
 
     .cakes-section {
         padding: 20px 0;
@@ -1325,6 +1421,7 @@ button {
 
     .cakes-section .section-label {
         font-size: 8px;
+
         letter-spacing: 1.5px;
     }
 
@@ -1345,7 +1442,9 @@ button {
     }
 
 
-    /* CAKE GRID */
+    /* ---------------------------------------------
+       CAKE GRID - 2 COLUMNS
+    --------------------------------------------- */
 
     .cake-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1404,9 +1503,9 @@ button {
     }
 
 
-    /* ================================================
+    /* ---------------------------------------------
        OTHER SECTIONS
-    ================================================ */
+    --------------------------------------------- */
 
     .why-section,
     .about-section,
@@ -1429,7 +1528,9 @@ button {
     }
 
 
-    /* WHY */
+    /* ---------------------------------------------
+       WHY
+    --------------------------------------------- */
 
     .why-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1456,7 +1557,9 @@ button {
     }
 
 
-    /* ABOUT */
+    /* ---------------------------------------------
+       ABOUT
+    --------------------------------------------- */
 
     .about-content {
         gap: 18px;
@@ -1479,7 +1582,9 @@ button {
     }
 
 
-    /* CTA */
+    /* ---------------------------------------------
+       CTA
+    --------------------------------------------- */
 
     .order-cta {
         padding: 30px 0;
@@ -1499,11 +1604,14 @@ button {
 
     .btn-white {
         min-height: 45px;
+
         font-size: 13px;
     }
 
 
-    /* CONTACT */
+    /* ---------------------------------------------
+       CONTACT
+    --------------------------------------------- */
 
     .contact-grid {
         gap: 8px;
@@ -1533,14 +1641,18 @@ button {
     }
 
 
-    /* FOOTER */
+    /* ---------------------------------------------
+       FOOTER
+    --------------------------------------------- */
 
     .footer {
         padding: 25px 0;
     }
 
 
-    /* WHATSAPP */
+    /* ---------------------------------------------
+       WHATSAPP
+    --------------------------------------------- */
 
     .floating-whatsapp {
         width: 54px;
@@ -1552,6 +1664,11 @@ button {
         font-size: 25px;
     }
 
+
+    /* ---------------------------------------------
+       BACK TO TOP
+    --------------------------------------------- */
+
     .back-to-top {
         right: 14px;
         bottom: 78px;
@@ -1561,7 +1678,9 @@ button {
     }
 
 
-    /* MODAL */
+    /* ---------------------------------------------
+       MODAL
+    --------------------------------------------- */
 
     .modal-box {
         max-height: 92vh;
@@ -1587,21 +1706,38 @@ button {
 
 /* =========================================================
    VERY SMALL PHONES
-   360px and below
+   UP TO 380px
 ========================================================= */
 
-@media screen and (max-width: 360px) {
-
-    .container {
-        width: calc(100% - 20px);
-    }
+@media screen and (max-width: 380px) {
 
     .header-inner {
-        width: calc(100% - 18px);
+        width: calc(100% - 6px);
+    }
+
+    .brand {
+        flex-shrink: 0;
+    }
+
+    .brand-icon {
+        width: 26px;
+        height: 26px;
+
+        font-size: 14px;
     }
 
     .brand-text strong {
-        font-size: 15px;
+        font-size: 11px;
+    }
+
+    .brand-text span {
+        font-size: 7px;
+    }
+
+    .main-nav a {
+        padding: 0 4px !important;
+
+        font-size: 9px !important;
     }
 
     .hero-content {
@@ -1619,6 +1755,7 @@ button {
 
     .hero-buttons .btn {
         min-height: 36px;
+
         font-size: 9px;
     }
 
@@ -1660,6 +1797,7 @@ button {
 
     .order-btn {
         min-height: 38px;
+
         font-size: 11px;
     }
 }
@@ -1690,6 +1828,7 @@ button {
 
     .cake-grid {
         grid-template-columns: repeat(3, 1fr);
+
         gap: 18px;
     }
 
@@ -1747,14 +1886,18 @@ button {
     }
 
 
-    /* HIDE MOBILE MENU */
+    /* ---------------------------------------------
+       DESKTOP MENU BUTTON HIDDEN
+    --------------------------------------------- */
 
     .menu-btn {
         display: none;
     }
 
 
-    /* DESKTOP NAV */
+    /* ---------------------------------------------
+       DESKTOP NAVIGATION
+    --------------------------------------------- */
 
     .main-nav {
         position: static;
@@ -1762,6 +1905,8 @@ button {
         display: flex;
 
         flex-direction: row;
+
+        align-items: center;
 
         padding: 0;
 
@@ -1785,7 +1930,9 @@ button {
     }
 
 
-    /* DESKTOP HERO */
+    /* ---------------------------------------------
+       DESKTOP HERO
+    --------------------------------------------- */
 
     .hero {
         min-height: 680px;
@@ -1796,7 +1943,9 @@ button {
     }
 
 
-    /* DESKTOP CAKES */
+    /* ---------------------------------------------
+       DESKTOP CAKES
+    --------------------------------------------- */
 
     .cake-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -1812,11 +1961,126 @@ button {
         transform: translateY(-4px);
 
         box-shadow:
-            0 12px 30px
-            rgba(104, 53, 68, 0.12);
+            0 12px 30px rgba(104, 53, 68, 0.12);
     }
 
     .order-btn:hover {
         background: #65253a;
+    }
+}
+
+
+/* =========================================================
+   FORCE PHONE NAVIGATION
+   Home | Cakes | About | Contact | Admin
+========================================================= */
+
+@media screen and (max-width: 899px) {
+
+    .menu-btn {
+        display: none !important;
+    }
+
+    .main-nav {
+        position: static !important;
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        width: auto;
+
+        gap: 0;
+
+        padding: 0 !important;
+
+        margin: 0;
+
+        background: transparent !important;
+
+        border: 0 !important;
+
+        border-radius: 0 !important;
+
+        box-shadow: none !important;
+
+        overflow: visible;
+    }
+
+    .main-nav.active {
+        display: flex !important;
+    }
+
+    .main-nav a {
+        min-height: 38px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 0 6px !important;
+
+        background: transparent !important;
+
+        border: 0 !important;
+
+        border-radius: 0 !important;
+
+        white-space: nowrap;
+
+        color: #34262a;
+
+        font-size: 11px !important;
+
+        font-weight: 700;
+    }
+
+    .main-nav a:hover {
+        background: transparent !important;
+
+        color: #7e3048;
+    }
+
+    .main-nav .admin-link {
+        color: #7e3048;
+    }
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONE NAVIGATION
+========================================================= */
+
+@media screen and (max-width: 380px) {
+
+    .header-inner {
+        width: calc(100% - 4px);
+    }
+
+    .brand-icon {
+        width: 24px;
+        height: 24px;
+
+        font-size: 13px;
+    }
+
+    .brand-text strong {
+        font-size: 10px;
+    }
+
+    .brand-text span {
+        font-size: 6px;
+    }
+
+    .main-nav a {
+        padding: 0 3px !important;
+
+        font-size: 8.5px !important;
     }
 }
