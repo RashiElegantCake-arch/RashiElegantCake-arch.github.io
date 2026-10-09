@@ -1,0 +1,221 @@
+/* CUSTOM CAKE REQUEST */
+
+.custom-request-section {
+    padding: 55px 14px;
+    background: linear-gradient(135deg, #fff5f7, #fffaf2);
+}
+
+.custom-request-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.custom-request-heading {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.custom-request-label {
+    display: inline-block;
+    color: #c04f78;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.custom-request-heading h2 {
+    color: #44232f;
+    font-size: clamp(25px, 5vw, 36px);
+    line-height: 1.25;
+    margin: 0 0 12px;
+}
+
+.custom-request-heading p {
+    color: #755d65;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.custom-request-form {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(100, 40, 60, 0.09);
+}
+
+.custom-photo-upload {
+    border: 2px dashed #e8a8bc;
+    background: #fff8fa;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 22px;
+}
+
+.custom-photo-upload label {
+    display: block;
+    font-weight: 700;
+    color: #512b3a;
+    margin-bottom: 8px;
+}
+
+.custom-photo-upload p {
+    font-size: 13px;
+    color: #806b73;
+    margin: 0 0 14px;
+}
+
+.custom-photo-upload input[type="file"] {
+    width: 100%;
+    max-width: 100%;
+    font-size: 14px;
+}
+
+#customCakePreview {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    max-height: 350px;
+    object-fit: contain;
+    margin: 16px auto 0;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+#customCakePreview[hidden] {
+    display: none;
+}
+
+.custom-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.custom-form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+}
+
+.custom-form-group label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #49313a;
+}
+
+.custom-form-group input,
+.custom-form-group select,
+.custom-form-group textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid #e7d8dd;
+    border-radius: 10px;
+    background: #fffdfd;
+    color: #38242c;
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+.custom-form-group input:focus,
+.custom-form-group select:focus,
+.custom-form-group textarea:focus {
+    border-color: #ce668b;
+    box-shadow: 0 0 0 3px rgba(206, 102, 139, 0.12);
+}
+
+.custom-form-group textarea {
+    resize: vertical;
+}
+
+.custom-full-width {
+    grid-column: 1 / -1;
+}
+
+.custom-request-submit {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    margin-top: 24px;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #c34f7b;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.custom-request-submit:hover {
+    background: #a83b65;
+}
+
+.custom-request-submit:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+.custom-request-message {
+    display: none;
+    margin-top: 18px;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.custom-request-message.success {
+    display: block;
+    color: #17663b;
+    background: #eaf8ef;
+}
+
+.custom-request-message.error {
+    display: block;
+    color: #982c38;
+    background: #fff0f1;
+}
+
+.custom-request-note {
+    margin: 14px 0 0;
+    text-align: center;
+    color: #806b73;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .custom-request-section {
+        padding: 38px 12px;
+    }
+
+    .custom-request-form {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .custom-form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .custom-full-width {
+        grid-column: auto;
+    }
+
+    .custom-photo-upload {
+        padding: 15px;
+    }
+
+    .custom-request-submit {
+        min-height: 54px;
+    }
+}
