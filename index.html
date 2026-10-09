@@ -18,6 +18,7 @@
     <!-- Main CSS -->
     <!-- v=12 forces browser to load latest CSS -->
     <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="custom-cake.css">
 
 </head>
 
@@ -331,6 +332,148 @@
 </section>
 
 
+
+
+
+<!-- =====================================================
+     CUSTOM CAKE REQUEST
+===================================================== -->
+<section class="custom-request-section" id="custom-request">
+    <div class="custom-request-container">
+
+        <div class="custom-request-heading">
+            <span class="custom-request-label">YOUR OWN DESIGN</span>
+            <h2>Can't Find Your Perfect Cake? 🎂</h2>
+            <p>
+                Upload your favourite cake design and tell us
+                how you would like your cake to be made.
+            </p>
+        </div>
+
+        <form id="customCakeForm" class="custom-request-form">
+
+            <div class="custom-photo-upload">
+                <label for="customCakePhoto">
+                    📸 Upload Your Reference Cake Photo
+                </label>
+
+                <p>JPG, PNG or WEBP · Maximum 5 MB</p>
+
+                <input
+                    type="file"
+                    id="customCakePhoto"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+
+                <img
+                    id="customCakePreview"
+                    alt="Selected reference cake preview"
+                    hidden
+                >
+            </div>
+
+            <div class="custom-form-grid">
+
+                <div class="custom-form-group">
+                    <label for="customCustomerName">Your Name *</label>
+                    <input
+                        type="text"
+                        id="customCustomerName"
+                        maxlength="100"
+                        placeholder="Enter your name"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="custom-form-group">
+                    <label for="customCustomerPhone">Contact Number *</label>
+                    <input
+                        type="tel"
+                        id="customCustomerPhone"
+                        maxlength="20"
+                        placeholder="07XXXXXXXX"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        required
+                    >
+                </div>
+
+                <div class="custom-form-group">
+                    <label for="customCakeWeight">Cake Weight *</label>
+                    <select id="customCakeWeight" required>
+                        <option value="500g">500g</option>
+                        <option value="1kg" selected>1kg</option>
+                        <option value="Other">Other / Discuss</option>
+                    </select>
+                </div>
+
+                <div class="custom-form-group">
+                    <label for="customRequiredDate">Required Date *</label>
+                    <input
+                        type="date"
+                        id="customRequiredDate"
+                        required
+                    >
+                </div>
+
+                <div class="custom-form-group">
+                    <label for="customRequiredTime">Required Time *</label>
+                    <input
+                        type="time"
+                        id="customRequiredTime"
+                        required
+                    >
+                </div>
+
+                <div class="custom-form-group custom-full-width">
+                    <label for="customCakeWriting">
+                        Cake Writing / Special Message
+                    </label>
+                    <textarea
+                        id="customCakeWriting"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="Example: Happy Birthday Rashi ❤️"
+                    ></textarea>
+                </div>
+
+                <div class="custom-form-group custom-full-width">
+                    <label for="customDeliveryDetails">
+                        Pickup / Delivery Details *
+                    </label>
+                    <textarea
+                        id="customDeliveryDetails"
+                        rows="3"
+                        maxlength="2000"
+                        placeholder="Pickup or delivery address and other details"
+                        required
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <div id="customRequestMessage"
+                 class="custom-request-message"
+                 role="status"
+                 aria-live="polite"></div>
+
+            <button type="submit"
+                    id="customRequestSubmit"
+                    class="custom-request-submit">
+                🎂 Send Custom Cake Request
+            </button>
+
+            <p class="custom-request-note">
+                We will review your design and contact you to discuss
+                availability and price.
+            </p>
+
+        </form>
+    </div>
+</section>
+<!-- END CUSTOM CAKE REQUEST SECTION -->
 
 <!-- =====================================================
      WHY CHOOSE US
@@ -1112,6 +1255,7 @@
 <!-- MAIN JAVASCRIPT -->
 
 <script src="script.js"></script>
+<script src="custom-cake.js"></script>
 
 
 </body>
