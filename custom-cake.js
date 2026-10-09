@@ -1,6 +1,6 @@
+```javascript
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("customCakeForm");
-
     if (!form) return;
 
     const photoInput = document.getElementById("customCakePhoto");
@@ -10,16 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateInput = document.getElementById("customRequiredDate");
 
     const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
-    const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/webp"
-    ];
+    // Rashi's WhatsApp number, Sri Lankan international format
+    const WHATSAPP_NUMBER = "94768727152";
 
     let previewUrl = null;
 
-    // Set today's date as the earliest selectable date.
     const today = new Date();
     const localToday = [
         today.getFullYear(),
@@ -40,19 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getSupabaseClient() {
-        if (
-            typeof supabaseClient === "undefined" ||
-            !supabaseClient
-        ) {
+        if (typeof supabaseClient === "undefined" || !supabaseClient) {
             throw new Error(
                 "Supabase connect wela naha. Please check supabase-config.js."
             );
         }
-
         return supabaseClient;
     }
 
-    // Show a preview when the customer chooses a photo.
+    // Preview selected cake photo
     photoInput.addEventListener("change", () => {
         clearMessage();
 
@@ -65,24 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
         photoPreview.hidden = true;
 
         const file = photoInput.files && photoInput.files[0];
-
         if (!file) return;
 
         if (!allowedTypes.includes(file.type)) {
             photoInput.value = "";
-            showMessage(
-                "Please select a JPG, PNG or WEBP image.",
-                "error"
-            );
+            showMessage("Please select a JPG, PNG or WEBP image.", "error");
             return;
         }
 
         if (file.size > MAX_FILE_SIZE) {
             photoInput.value = "";
-            showMessage(
-                "Photo eka 5 MB walata wada adu wenna one.",
-                "error"
-            );
+            showMessage("Photo eka 5 MB walata wada adu wenna one.", "error");
             return;
         }
 
@@ -96,30 +82,26 @@ document.addEventListener("DOMContentLoaded", () => {
         clearMessage();
 
         const customerName =
-            document.getElementById("customCustomerName")
-                .value.trim();
+            document.getElementById("customCustomerName").value.trim();
 
         const customerPhone =
-            document.getElementById("customCustomerPhone")
-                .value.trim();
+            document.getElementById("customCustomerPhone").value.trim();
 
         const cakeWeight =
             document.getElementById("customCakeWeight").value;
 
         const requiredDate = dateInput.value;
+
         const requiredTime =
             document.getElementById("customRequiredTime").value;
 
         const cakeWriting =
-            document.getElementById("customCakeWriting")
-                .value.trim();
+            document.getElementById("customCakeWriting").value.trim();
 
         const deliveryDetails =
-            document.getElementById("customDeliveryDetails")
-                .value.trim();
+            document.getElementById("customDeliveryDetails").value.trim();
 
-        const photoFile =
-            photoInput.files && photoInput.files[0];
+        const photoFile = photoInput.files && photoInput.files[0];
 
         if (
             !customerName ||
@@ -141,19 +123,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (customerPhone.length > 20 || customerPhone.length < 7) {
-            showMessage(
-                "Valid contact number ekak enter karanna.",
-                "error"
-            );
+        if (customerPhone.length < 7 || customerPhone.length > 20) {
+            showMessage("Valid contact number ekak enter karanna.", "error");
             return;
         }
 
         if (deliveryDetails.length > 2000) {
-            showMessage(
-                "Pickup / Delivery details tika adu karanna.",
-                "error"
-            );
+            showMessage("Pickup / Delivery details tika adu karanna.", "error");
             return;
         }
 
@@ -166,30 +142,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (!allowedTypes.includes(photoFile.type)) {
-            showMessage(
-                "JPG, PNG or WEBP photo ekak select karanna.",
-                "error"
-            );
+            showMessage("JPG, PNG or WEBP photo ekak select karanna.", "error");
             return;
         }
 
         if (photoFile.size > MAX_FILE_SIZE) {
-            showMessage(
-                "Photo eka 5 MB walata wada adu wenna one.",
-                "error"
-            );
+            showMessage("Photo eka 5 MB walata wada adu wenna one.", "error");
             return;
         }
 
         submitButton.disabled = true;
-        submitButton.textContent = "Uploading photo and sending request...";
+        submitButton.textContent = "Uploading photo and preparing WhatsApp...";
+
+        // Open a tab while still inside the user's click, to reduce popup blocking.
+        // It will navigate to WhatsApp only after the upload and database save succeed.
+        const whatsappWindow = window.open("about:blank", "_blank");
 
         let uploadedPath = null;
 
         try {
             const client = getSupabaseClient();
 
-            // Create a unique storage filename.
             const fileExtension = {
                 "image/jpeg": "jpg",
                 "image/png": "png",
@@ -200,15 +173,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 typeof crypto !== "undefined" &&
                 typeof crypto.randomUUID === "function"
                     ? crypto.randomUUID()
-                    : Date.now() + "-" +
-                      Math.random().toString(36).slice(2);
+                    : Date.now() + "-" + Math.random().toString(36).slice(2);
 
             const safeFileName =
                 `${Date.now()}-${uniqueId}.${fileExtension}`;
 
             const storagePath = `requests/${safeFileName}`;
 
-            // Upload the reference image to Supabase Storage.
+            // Upload the reference photo
             const { error: uploadError } = await client
                 .storage
                 .from("custom-cake-requests")
@@ -218,14 +190,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             if (uploadError) {
-                throw new Error(
-                    "Photo upload failed: " + uploadError.message
-                );
+                throw new Error("Photo upload failed: " + uploadError.message);
             }
 
             uploadedPath = storagePath;
 
-            // Get the public URL for the uploaded image.
+            // Public photo link
             const { data: imageData } = client
                 .storage
                 .from("custom-cake-requests")
@@ -233,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const imageUrl = imageData.publicUrl;
 
-            // Save request details in the database.
+            // Save order details
             const { error: insertError } = await client
                 .from("custom_cake_requests")
                 .insert({
@@ -250,15 +220,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             if (insertError) {
-                throw new Error(
-                    "Request save failed: " + insertError.message
-                );
+                throw new Error("Request save failed: " + insertError.message);
             }
 
+            // Build WhatsApp message including the uploaded photo URL
+            const whatsappMessage =
+                "🎂 NEW CUSTOM CAKE ORDER - Rashi Elegant Cake\n\n" +
+                "Customer: " + customerName + "\n" +
+                "Phone: " + customerPhone + "\n" +
+                "Cake Weight: " + cakeWeight + "\n" +
+                "Required Date: " + requiredDate + "\n" +
+                "Required Time: " + requiredTime + "\n" +
+                "Cake Writing: " + (cakeWriting || "None") + "\n" +
+                "Pickup / Delivery: " + deliveryDetails + "\n\n" +
+                "Customer's Cake Design Photo:\n" + imageUrl + "\n\n" +
+                "Please confirm the design and price.";
+
+            const whatsappUrl =
+                "https://wa.me/" + WHATSAPP_NUMBER +
+                "?text=" + encodeURIComponent(whatsappMessage);
+
             showMessage(
-                "Thank you! Your custom cake request was submitted successfully. Rashi will contact you to discuss your design and price.",
+                "Your custom cake request was saved. WhatsApp is opening with your order details and photo link. Please press Send in WhatsApp.",
                 "success"
             );
+
+            if (whatsappWindow && !whatsappWindow.closed) {
+                whatsappWindow.location.href = whatsappUrl;
+            } else {
+                // Popup may be blocked by the browser. Show a clickable fallback.
+                const fallbackLink = document.createElement("a");
+                fallbackLink.href = whatsappUrl;
+                fallbackLink.target = "_blank";
+                fallbackLink.rel = "noopener noreferrer";
+                fallbackLink.textContent = "Open WhatsApp to send your order";
+                fallbackLink.style.display = "block";
+                fallbackLink.style.marginTop = "10px";
+                fallbackLink.style.fontWeight = "bold";
+                messageBox.appendChild(document.createElement("br"));
+                messageBox.appendChild(fallbackLink);
+            }
 
             form.reset();
             dateInput.min = localToday;
@@ -274,14 +275,16 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Custom cake request error:", error);
 
+            if (whatsappWindow && !whatsappWindow.closed) {
+                whatsappWindow.close();
+            }
+
             showMessage(
                 error.message ||
                 "Request eka submit karanna bari una. Please try again.",
                 "error"
             );
 
-            // If the photo uploaded but the database insert failed,
-            // the photo remains in Storage and can be cleaned up later.
             if (uploadedPath) {
                 console.warn(
                     "Photo uploaded but request may not have saved. Storage path:",
@@ -294,3 +297,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+```
