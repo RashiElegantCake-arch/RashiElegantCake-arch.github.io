@@ -1136,7 +1136,11 @@ textarea:focus-visible {
 }
 
 
-/* Falling Cupcake Animation */
+/* =====================================
+   BEAUTIFUL FALLING CAKE ANIMATION
+   🎂 🧁 🍰 💗 Same Size
+===================================== */
+
 .cupcake-rain {
     position: fixed;
     inset: 0;
@@ -1149,44 +1153,67 @@ textarea:focus-visible {
 
 .cupcake-rain span {
     position: absolute;
-    top: -60px;
-    font-size: 22px;
+    top: -90px;
+    display: block;
+    font-size: 44px;
+    line-height: 1.2;
     opacity: 0;
-    animation: cupcakeFall 12s linear infinite;
-    filter: drop-shadow(0 2px 3px rgba(150, 70, 90, 0.15));
+    animation: beautifulCakeFall 14s linear infinite;
+    filter: drop-shadow(0 4px 6px rgba(180, 75, 110, 0.22));
+    will-change: transform, opacity;
 }
 
-.cupcake-rain span:nth-child(even) {
-    font-size: 17px;
-    animation-duration: 15s;
+/* All Emojis Same Size */
+.cupcake-rain span:nth-child(n) {
+    font-size: 44px;
 }
 
-@keyframes cupcakeFall {
+@keyframes beautifulCakeFall {
     0% {
-        transform: translateY(-60px) rotate(0deg);
+        transform: translate3d(0, -10vh, 0) rotate(-20deg);
         opacity: 0;
     }
 
     10% {
-        opacity: 0.8;
+        opacity: 0.9;
     }
 
-    85% {
-        opacity: 0.75;
+    30% {
+        transform: translate3d(25px, 30vh, 0) rotate(80deg);
+    }
+
+    55% {
+        transform: translate3d(-20px, 60vh, 0) rotate(180deg);
+        opacity: 0.85;
+    }
+
+    80% {
+        transform: translate3d(20px, 90vh, 0) rotate(260deg);
+        opacity: 0.7;
     }
 
     100% {
-        transform: translateY(110vh) rotate(300deg);
+        transform: translate3d(-15px, 115vh, 0) rotate(360deg);
         opacity: 0;
     }
 }
 
-/* Disable animation when reduced motion is preferred */
+/* Mobile Screen */
+@media (max-width: 600px) {
+    .cupcake-rain span,
+    .cupcake-rain span:nth-child(n) {
+        font-size: 36px;
+    }
+}
+
+/* Respect Reduced Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
     .cupcake-rain {
         display: none;
     }
 }
+
+
 
 
 /* =========================================================
