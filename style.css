@@ -1166,58 +1166,51 @@ textarea:focus-visible {
     will-change: transform, opacity;
 }
 
-/* All Emojis Same Size */
-.cupcake-rain span:nth-child(n) {
+
+/* Cake emoji rain: top section only */
+.cupcake-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.cupcake-rain span {
+    position: absolute;
+    top: -70px;
     font-size: 44px;
+    line-height: 1.2;
+    opacity: 0;
+    animation: beautifulCakeFall 14s linear infinite;
+    filter: drop-shadow(0 4px 6px rgba(180, 75, 110, 0.22));
 }
 
 @keyframes beautifulCakeFall {
     0% {
-        transform: translate3d(0, -10vh, 0) rotate(-20deg);
+        transform: translateY(-50px) rotate(-20deg);
         opacity: 0;
     }
-
     10% {
         opacity: 0.9;
     }
-
-    30% {
-        transform: translate3d(25px, 30vh, 0) rotate(80deg);
-    }
-
-    55% {
-        transform: translate3d(-20px, 60vh, 0) rotate(180deg);
-        opacity: 0.85;
-    }
-
-    80% {
-        transform: translate3d(20px, 90vh, 0) rotate(260deg);
+    90% {
         opacity: 0.7;
     }
-
     100% {
-        transform: translate3d(-15px, 115vh, 0) rotate(360deg);
+        transform: translateY(100vh) rotate(360deg);
         opacity: 0;
     }
 }
 
-/* Mobile Screen */
 @media (max-width: 600px) {
-    .cupcake-rain span,
-    .cupcake-rain span:nth-child(n) {
+    .cupcake-rain span {
         font-size: 36px;
     }
 }
-
-/* Respect Reduced Motion Preferences */
-@media (prefers-reduced-motion: reduce) {
-    .cupcake-rain {
-        display: none;
-    }
-}
-
-
-
 
 /* =========================================================
    HOVER EFFECTS - MOUSE / TRACKPAD
