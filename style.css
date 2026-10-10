@@ -31,30 +31,17 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--text);
-    background-color: var(--cream);
-    background-image:
-        radial-gradient(
-            ellipse at 5% 15%,
-            rgba(255, 190, 207, 0.36),
-            transparent 38%
-        ),
-        radial-gradient(
-            ellipse at 95% 45%,
-            rgba(255, 220, 190, 0.38),
-            transparent 38%
-        ),
-        radial-gradient(
-            ellipse at 15% 90%,
-            rgba(245, 185, 202, 0.25),
-            transparent 35%
-        );
-    background-attachment: fixed;
-    line-height: 1.6;
-    overflow-x: hidden;
-}
+    background: linear-gradient(
+        135deg,
+        #fff5f7 0%,
+        #fffaf0 45%,
+        #ffe8ef 100%
+    );
 
+    color: #34262a;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
 img {
     display: block;
     max-width: 100%;
@@ -431,14 +418,30 @@ textarea:focus-visible {
     gap: 12px;
 }
 
+/* =====================================
+   🎂 ELEGANT CAKE CARDS
+===================================== */
+
 .cake-card {
-    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #ffe3eb;
+    border-radius: 18px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    box-shadow:
+        0 5px 18px rgba(224, 112, 151, 0.10);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.cake-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 12px 28px rgba(224, 112, 151, 0.20);
+}
 }
 
 .cake-image-wrap {
@@ -1916,5 +1919,45 @@ textarea:focus-visible {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+}
+/* =====================================
+   ✨ SOFT PINK SPARKLE EFFECT
+===================================== */
+
+body::before {
+    content: "✦  ✧  ⋆  ✧  ✦";
+    position: fixed;
+    top: 18%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #f5a4c0;
+    font-size: 20px;
+    letter-spacing: 35px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 1;
+    animation: sparkleGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes sparkleGlow {
+    from {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0.7;
+        transform: translateY(8px);
+    }
+}
+
+/* Keep website content above decorative sparkles */
+header,
+main,
+footer,
+section,
+.container {
+    position: relative;
 }
 ```
