@@ -18,7 +18,7 @@
     <!-- Main CSS -->
     <!-- v=12 forces browser to load latest CSS -->
     <link rel="stylesheet" href="style.css?v=12">
-    <link rel="stylesheet" href="custom-cake.css">
+    <link rel="stylesheet" href="custom-cake.css?v=3">
 
 </head>
 
@@ -342,11 +342,11 @@
     <div class="custom-request-container">
 
         <div class="custom-request-heading">
-            <span class="custom-request-label">YOUR OWN DESIGN</span>
-            <h2>Can't Find Your Perfect Cake? 🎂</h2>
+            <span class="custom-request-label">CUSTOM CAKE ORDER</span>
+            <h2>Order a Cake That Is Not on Our Website 🎂</h2>
             <p>
-                Upload your favourite cake design and tell us
-                how you would like your cake to be made.
+                Found a cake design you love somewhere else? Upload its photo,
+                add your order details, and we will contact you to confirm the price and design.
             </p>
         </div>
 
@@ -354,7 +354,7 @@
 
             <div class="custom-photo-upload">
                 <label for="customCakePhoto">
-                    📸 Upload Your Reference Cake Photo
+                    📸 Upload the Cake Photo You Want
                 </label>
 
                 <p>JPG, PNG or WEBP · Maximum 5 MB</p>
@@ -462,12 +462,11 @@
             <button type="submit"
                     id="customRequestSubmit"
                     class="custom-request-submit">
-                🎂 Send Custom Cake Request
+                🎂 Order This Custom Cake
             </button>
 
             <p class="custom-request-note">
-                We will review your design and contact you to discuss
-                availability and price.
+                Your cake photo and order details will be saved. Rashi will contact you to confirm the design, availability and price.
             </p>
 
         </form>
@@ -1249,13 +1248,13 @@
 
 <!-- SUPABASE CONFIG -->
 
-<script src="supabase-config.js"></script>
+<script src="supabase-config.js?v=2"></script>
 
 
 <!-- MAIN JAVASCRIPT -->
 
-<script src="script.js"></script>
-    <script src="custom-cake.js"></script>
+<script src="script.js?v=12"></script>
+<script src="custom-cake.js?v=3" onerror="document.getElementById('customRequestMessage').textContent = 'Could not load custom-cake.js. Please check the file name in GitHub.'; document.getElementById('customRequestMessage').className = 'custom-request-message error';"></script>
 
 
 </body>
