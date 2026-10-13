@@ -64,3 +64,126 @@
 body::before{content:"✦  ✧  ⋆  ✧  ✦";position:fixed;top:18%;left:0;width:100%;text-align:center;color:#f5a4c0;font-size:20px;letter-spacing:35px;opacity:.35;pointer-events:none;z-index:1;animation:sparkleGlow 4s ease-in-out infinite alternate}@keyframes sparkleGlow{from{opacity:.2;transform:translateY(0)}to{opacity:.55;transform:translateY(8px)}}header,main,footer,section,.container{position:relative}
 /* ACCESSIBILITY */
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+
+
+/* =========================================
+   CAKE PHOTO ZOOM - RASHI ELEGANT CAKE
+========================================= */
+
+/* Show customers that cake photos are clickable */
+.cake-image-wrap {
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cake-image-wrap .cake-image {
+    transition: transform 0.3s ease;
+}
+
+.cake-image-wrap:hover .cake-image {
+    transform: scale(1.04);
+}
+
+/* Full-screen image viewer */
+.cake-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(28, 12, 19, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.cake-zoom-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cake-zoom-image {
+    display: block;
+    max-width: 100%;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 14px;
+    box-shadow: 0 10px 45px rgba(0, 0, 0, 0.35);
+    transform: scale(0.94);
+    transition: transform 0.25s ease;
+}
+
+.cake-zoom-overlay.active .cake-zoom-image {
+    transform: scale(1);
+}
+
+/* Close button */
+.cake-zoom-close {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    background: #fff;
+    color: #7e3048;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cake-zoom-hint {
+    position: absolute;
+    bottom: 18px;
+    left: 12px;
+    right: 12px;
+    color: #fff;
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+body.cake-zoom-open {
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .cake-zoom-overlay {
+        padding: 12px;
+    }
+
+    .cake-zoom-image {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 10px;
+    }
+
+    .cake-zoom-close {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cake-zoom-overlay,
+    .cake-zoom-image,
+    .cake-image-wrap .cake-image {
+        transition: none;
+    }
+}
+
