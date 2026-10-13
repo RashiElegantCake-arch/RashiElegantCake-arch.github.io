@@ -990,5 +990,139 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
         loadCakes();
+
+
+
+       
+
+
+       
+/* =========================================
+   CAKE PHOTO ZOOM / LIGHTBOX
+   Works with dynamically loaded Supabase cakes
+========================================= */
+
+(function setupCakeZoom() {
+    const cakeGrid = document.getElementById("cakeGrid");
+
+    if (!cakeGrid) return;
+
+    // Prevent creating the viewer more than once
+    if (document.getElementById("cakeZoomOverlay")) return;
+
+    // Create the image viewer
+    const overlay = document.createElement("div");
+    overlay.id = "cakeZoomOverlay";
+    overlay.className = "cake-zoom-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Enlarged cake photo");
+
+    overlay.innerHTML = `
+        <button
+            type="button"
+            class="cake-zoom-close"
+            aria-label="Close enlarged cake photo"
+        >&times;</button>
+
+        <img class="cake-zoom-image" alt="Enlarged cake design">
+
+        <p class="cake-zoom-hint">
+            Tap outside the photo or press × to close
+        </p>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const zoomImage = overlay.querySelector(".cake-zoom-image");
+    const closeButton = overlay.querySelector(".cake-zoom-close");
+
+    let previousFocus = null;
+
+    function openCakeZoom(image) {
+        if (!image || !image.src) return;
+
+        previousFocus = image;
+
+        zoomImage.src = image.currentSrc || image.src;
+        zoomImage.alt = image.alt || "Cake design";
+
+        overlay.classList.add("active");
+        document.body.classList.add("cake-zoom-open");
+
+        closeButton.focus();
+    }
+
+    function closeCakeZoom() {
+        overlay.classList.remove("active");
+        document.body.classList.remove("cake-zoom-open");
+
+        zoomImage.removeAttribute("src");
+
+        if (previousFocus) {
+            previousFocus.focus({ preventScroll: true });
+            previousFocus = null;
+        }
+    }
+
+    // Event delegation works for cakes loaded later from Supabase
+    cakeGrid.addEventListener("click", function (event) {
+        const image = event.target.closest(".cake-image");
+
+        if (!image || !cakeGrid.contains(image)) return;
+
+        openCakeZoom(image);
+    });
+
+    // Keyboard accessibility for desktop users
+    cakeGrid.addEventListener("keydown", function (event) {
+        const image = event.target.closest(".cake-image");
+
+        if (!image || !cakeGrid.contains(image)) return;
+
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openCakeZoom(image);
+        }
+    });
+
+    // Make dynamically created cake photos keyboard accessible
+    function makeImagesAccessible() {
+        cakeGrid.querySelectorAll(".cake-image").forEach(function (image) {
+            image.setAttribute("tabindex", "0");
+            image.setAttribute("role", "button");
+            image.setAttribute(
+                "aria-label",
+                (image.alt || "Cake") + " - tap to enlarge"
+            );
+        });
+    }
+
+    makeImagesAccessible();
+
+    // Refresh accessibility attributes when Supabase renders cakes
+    const observer = new MutationObserver(makeImagesAccessible);
+    observer.observe(cakeGrid, { childList: true, subtree: true });
+
+    closeButton.addEventListener("click", closeCakeZoom);
+
+    // Close when tapping the dark background
+    overlay.addEventListener("click", function (event) {
+        if (event.target === overlay) {
+            closeCakeZoom();
+        }
+    });
+
+    // Close with Escape
+    document.addEventListener("keydown", function (event) {
+        if (
+            event.key === "Escape" &&
+            overlay.classList.contains("active")
+        ) {
+            closeCakeZoom();
+        }
+    });
+})();
+
     }
 );
