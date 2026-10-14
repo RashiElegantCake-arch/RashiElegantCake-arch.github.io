@@ -187,3 +187,156 @@ body.cake-zoom-open {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   CUSTOM CAKE ORDER POPUP
+========================================= */
+
+/* Hide the custom cake form on the page */
+.custom-request-section {
+    display: none !important;
+}
+
+/* Popup background */
+.custom-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background: rgba(40, 15, 25, 0.72);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.custom-popup-overlay.active {
+    display: flex;
+}
+
+/* Popup window */
+.custom-popup-box {
+    position: relative;
+    width: min(760px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #fffafa, #fff0f4);
+    box-shadow: 0 20px 65px rgba(0, 0, 0, 0.3);
+    animation: customPopupAppear 0.25s ease;
+}
+
+.custom-popup-box .custom-request-section {
+    display: block !important;
+    padding: 25px 14px;
+    background: transparent;
+}
+
+.custom-popup-box .custom-request-container {
+    width: 100%;
+}
+
+.custom-popup-box .custom-request-heading {
+    padding-right: 28px;
+    margin-bottom: 18px;
+}
+
+.custom-popup-box .custom-request-heading h2 {
+    font-size: clamp(23px, 5vw, 32px);
+}
+
+.custom-popup-box .custom-request-form {
+    padding: 16px;
+    box-shadow: none;
+}
+
+.custom-popup-close {
+    position: sticky;
+    top: 10px;
+    float: right;
+    z-index: 5;
+    width: 42px;
+    height: 42px;
+    margin: 10px 10px -52px 0;
+    border: 0;
+    border-radius: 50%;
+    background: #7e3048;
+    color: white;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.custom-popup-open {
+    overflow: hidden;
+}
+
+.custom-cake-open-btn {
+    display: flex;
+    width: min(420px, calc(100% - 28px));
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    margin: 22px auto 0;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #c84e72, #8f2949);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 7px 20px rgba(165, 47, 80, 0.18);
+}
+
+.custom-cake-open-btn:active {
+    transform: scale(0.98);
+}
+
+@keyframes customPopupAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .custom-popup-overlay {
+        padding: 7px;
+    }
+
+    .custom-popup-box {
+        max-height: 95vh;
+        border-radius: 16px;
+    }
+
+    .custom-popup-box .custom-request-section {
+        padding: 22px 9px;
+    }
+
+    .custom-popup-box .custom-request-form {
+        padding: 12px;
+    }
+
+    .custom-cake-open-btn {
+        min-height: 48px;
+        font-size: 13px;
+    }
+}
