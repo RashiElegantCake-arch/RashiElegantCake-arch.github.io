@@ -463,3 +463,163 @@ body.custom-popup-open {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   RASHI ELEGANT CAKE — ROMANTIC ANIMATIONS
+   ========================================== */
+
+/* 1. FALLING ROSE PETALS — HERO ONLY */
+#home {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+#home .hero-petal-layer,
+#home .hero-sparkle-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#home .hero-petal-layer {
+    z-index: 1;
+}
+
+#home .hero-sparkle-layer {
+    z-index: 2;
+}
+
+#home .hero-content {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-petal {
+    position: absolute;
+    top: -35px;
+    left: var(--petal-left);
+    width: 12px;
+    height: 18px;
+    border-radius: 90% 10% 80% 20%;
+    background: linear-gradient(135deg, #ffdce6, #d96b8c);
+    opacity: 0;
+    animation: rosePetalFall var(--petal-duration) linear
+        var(--petal-delay) infinite;
+}
+
+@keyframes rosePetalFall {
+    0% {
+        transform: translate3d(0, -25px, 0) rotate(0deg);
+        opacity: 0;
+    }
+    12% {
+        opacity: 0.75;
+    }
+    85% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate3d(var(--petal-drift), 650px, 0)
+            rotate(480deg);
+        opacity: 0;
+    }
+}
+
+/* 2. LIMITED GOLDEN SPARKLES */
+.hero-sparkle {
+    position: absolute;
+    left: var(--sparkle-left);
+    top: var(--sparkle-top);
+    color: #e7bd68;
+    font-size: var(--sparkle-size);
+    opacity: 0;
+    animation: goldenTwinkle var(--sparkle-duration) ease-in-out
+        var(--sparkle-delay) infinite;
+}
+
+@keyframes goldenTwinkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1) rotate(45deg);
+    }
+}
+
+/* 3. CAKE CARD HOVER */
+#cakeGrid > * {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #cakeGrid > *:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px rgba(126, 48, 72, 0.16);
+    }
+}
+
+/* 4. SMOOTH SECTION REVEAL */
+.romantic-reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+}
+
+.romantic-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 5. SOFT GOLDEN ORDER BUTTON GLOW */
+.romantic-order-glow {
+    animation: orderButtonGlow 2.8s ease-in-out infinite;
+}
+
+@keyframes orderButtonGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 rgba(214, 173, 101, 0);
+    }
+    50% {
+        box-shadow:
+            0 0 10px rgba(214, 173, 101, 0.38),
+            0 0 20px rgba(214, 173, 101, 0.16);
+    }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .hero-petal,
+    .hero-sparkle,
+    .romantic-order-glow {
+        animation: none !important;
+    }
+
+    .romantic-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    #cakeGrid > * {
+        transition: none;
+    }
+}
+
