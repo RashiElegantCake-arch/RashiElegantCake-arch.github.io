@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 5. CONTINUOUS CUPCAKE RAIN 🍰
-    const rain = document.querySelector(".cupcake-rain");
+const rain = document.querySelector("#home .cupcake-rain");
 
     if (rain && !rain.dataset.continuousRain) {
         rain.dataset.continuousRain = "true";
