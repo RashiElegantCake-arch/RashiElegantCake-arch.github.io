@@ -479,63 +479,72 @@ body.custom-popup-open {
 
 
   
-/* ==========================================
-   RASHI ELEGANT CAKE — CONTINUOUS CUPCAKE RAIN
-   ========================================== */
 
-.cupcake-rain {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
+/* ==========================================
+   CUPCAKE RAIN — HERO SECTION ONLY
+========================================== */
+
+#home {
+    position: relative;
     overflow: hidden;
-    pointer-events: none;
-    z-index: 999;
+    isolation: isolate;
 }
 
-.cupcake-rain span {
+#home .cupcake-rain {
     position: absolute;
-    top: -70px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+}
+
+#home .cupcake-rain span {
+    position: absolute;
+    top: -55px;
     left: var(--cupcake-left, 50%);
     font-size: var(--cupcake-size, 25px);
-    opacity: 0;
     line-height: 1;
+    opacity: 0;
     will-change: transform;
-    animation: cupcakeFall var(--cupcake-duration, 8s)
+    animation: heroCupcakeFall var(--cupcake-duration, 8s)
         linear var(--cupcake-delay, 0s) infinite;
 }
 
-@keyframes cupcakeFall {
+#home .hero-content {
+    position: relative;
+    z-index: 3;
+}
+
+@keyframes heroCupcakeFall {
     0% {
-        transform: translate3d(0, -70px, 0) rotate(0deg);
+        transform: translateY(-55px) rotate(0deg);
         opacity: 0;
     }
 
-    8% {
+    12% {
         opacity: 0.85;
     }
 
-    90% {
+    88% {
         opacity: 0.8;
     }
 
     100% {
-        transform: translate3d(var(--cupcake-drift, 35px), 110vh, 0)
-            rotate(360deg);
+        transform: translate(
+            var(--cupcake-drift, 25px),
+            calc(100% + 100px)
+        ) rotate(360deg);
         opacity: 0;
     }
 }
 
-/* Disable animation for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    .cupcake-rain span {
+    #home .cupcake-rain span {
         animation: none !important;
         display: none;
     }
 }
 
-    #cakeGrid > * {
-        transition: none;
-    }
-}
 
