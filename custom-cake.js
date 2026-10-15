@@ -1,6 +1,7 @@
-
+```javascript
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("customCakeForm");
+
     if (!form) {
         console.error("Custom Cake form not found!");
         return;
@@ -25,15 +26,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof supabaseClient === "undefined" || !supabaseClient) {
             throw new Error("Supabase connection eka hariyata load wela naha.");
         }
+
         return supabaseClient;
     }
 
-    if (!photoInput || !photoPreview || !submitButton || !messageBox || !dateInput) {
+    if (
+        !photoInput ||
+        !photoPreview ||
+        !submitButton ||
+        !messageBox ||
+        !dateInput
+    ) {
         console.error("Custom cake form fields missing.");
         return;
     }
 
     const now = new Date();
+
     const today = [
         now.getFullYear(),
         String(now.getMonth() + 1).padStart(2, "0"),
@@ -42,12 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dateInput.min = today;
 
+    // =====================================
+    // PHOTO PREVIEW AND VALIDATION
+    // =====================================
+
     photoInput.addEventListener("change", () => {
         messageBox.textContent = "";
         photoPreview.hidden = true;
         photoPreview.removeAttribute("src");
 
         const file = photoInput.files && photoInput.files[0];
+
         if (!file) return;
 
         if (!allowedTypes.includes(file.type)) {
@@ -66,21 +80,47 @@ document.addEventListener("DOMContentLoaded", () => {
         photoPreview.hidden = false;
     });
 
+    // =====================================
+    // SUBMIT CUSTOM CAKE REQUEST
+    // =====================================
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const customerName = document.getElementById("customCustomerName").value.trim();
-        const customerPhone = document.getElementById("customCustomerPhone").value.trim();
-        const cakeWeight = document.getElementById("customCakeWeight").value;
+        const customerName =
+            document.getElementById("customCustomerName").value.trim();
+
+        const customerPhone =
+            document.getElementById("customCustomerPhone").value.trim();
+
+        const cakeWeight =
+            document.getElementById("customCakeWeight").value;
+
         const requiredDate = dateInput.value;
-        const requiredTime = document.getElementById("customRequiredTime").value;
-        const cakeWriting = document.getElementById("customCakeWriting").value.trim();
-        const deliveryDetails = document.getElementById("customDeliveryDetails").value.trim();
+
+        const requiredTime =
+            document.getElementById("customRequiredTime").value;
+
+        const cakeWriting =
+            document.getElementById("customCakeWriting").value.trim();
+
+        const deliveryDetails =
+            document.getElementById("customDeliveryDetails").value.trim();
+
         const photoFile = photoInput.files && photoInput.files[0];
 
-        if (!customerName || !customerPhone || !cakeWeight ||
-            !requiredDate || !requiredTime || !deliveryDetails || !photoFile) {
-            showMessage("Required details okkoma fill karala cake photo eka select karanna.");
+        if (
+            !customerName ||
+            !customerPhone ||
+            !cakeWeight ||
+            !requiredDate ||
+            !requiredTime ||
+            !deliveryDetails ||
+            !photoFile
+        ) {
+            showMessage(
+                "Required details okkoma fill karala cake photo eka select karanna."
+            );
             return;
         }
 
@@ -89,19 +129,28 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (!allowedTypes.includes(photoFile.type) || photoFile.size > MAX_FILE_SIZE) {
-            showMessage("JPG, PNG, WEBP photo ekak 5 MB walata aduwen select karanna.");
+        if (
+            !allowedTypes.includes(photoFile.type) ||
+            photoFile.size > MAX_FILE_SIZE
+        ) {
+            showMessage(
+                "JPG, PNG, WEBP photo ekak 5 MB walata aduwen select karanna."
+            );
             return;
         }
 
         submitButton.disabled = true;
         submitButton.textContent = "Processing order...";
 
-        // Open WhatsApp tab during the click to reduce popup blocking.
+        // WhatsApp tab eka kalin open karala popup blocking adu karanawa.
         const whatsappWindow = window.open("about:blank", "_blank");
 
         try {
             const client = getClient();
+
+            // =====================================
+            // UPLOAD REFERENCE CAKE PHOTO
+            // =====================================
 
             const extension = {
                 "image/jpeg": "jpg",
@@ -109,8 +158,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 "image/webp": "webp"
             }[photoFile.type];
 
-            const fileName = "requests/" + Date.now() + "-" +
-                Math.random().toString(36).slice(2) + "." + extension;
+            const fileName =
+                "requests/" +
+                Date.now() +
+                "-" +
+                Math.random().toString(36).slice(2) +
+                "." +
+                extension;
 
             const { error: uploadError } = await client.storage
                 .from("custom-cake-requests")
@@ -120,7 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             if (uploadError) {
-                throw new Error("Photo upload failed: " + uploadError.message);
+                throw new Error(
+                    "Photo upload failed: " + uploadError.message
+                );
             }
 
             const { data: imageData } = client.storage
@@ -128,6 +184,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 .getPublicUrl(fileName);
 
             const imageUrl = imageData.publicUrl;
+
+            // =====================================
+            // SAVE REQUEST TO SUPABASE
+            // =====================================
 
             const { error: insertError } = await client
                 .from("custom_cake_requests")
@@ -145,43 +205,86 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             if (insertError) {
-                throw new Error("Database save failed: " + insertError.message);
+                throw new Error(
+                    "Database save failed: " + insertError.message
+                );
             }
+
+            // =====================================
+            // WHATSAPP MESSAGE
+            // SAME FORMAT AS NORMAL CAKE ORDER
+            // =====================================
 
             const message =
                 "🎂 NEW CUSTOM CAKE REQUEST - Rashi Elegant Cake\n\n" +
-                "Customer: " + customerName + "\n" +
-                "Phone: " + customerPhone + "\n" +
-                "Weight: " + cakeWeight + "\n" +
-                "Date: " + requiredDate + "\n" +
-                "Time: " + requiredTime + "\n" +
-                "Cake writing: " + (cakeWriting || "None") + "\n" +
-                "Pickup / Delivery: " + deliveryDetails + "\n\n" +
-                "Reference cake photo:\n" + imageUrl;
 
-            const whatsappUrl = "https://wa.me/" + WHATSAPP_NUMBER +
-                "?text=" + encodeURIComponent(message);
+                "👤 Customer: " + customerName + "\n" +
+
+                "📞 Contact: " + customerPhone + "\n\n" +
+
+                "🎂 Cake:\n" +
+                "Custom Cake Request\n\n" +
+
+                "⚖️ Weight:\n" +
+                cakeWeight + "\n\n" +
+
+                "💰 Price:\n" +
+                "To be confirmed\n\n" +
+
+                "📅 Required Date:\n" +
+                requiredDate + "\n\n" +
+
+                "⏰ Required Time:\n" +
+                requiredTime + "\n\n" +
+
+                "✍️ Cake Writing / Special Message:\n" +
+                (cakeWriting || "None") + "\n\n" +
+
+                "📍 Pickup / Delivery Details:\n" +
+                deliveryDetails + "\n\n" +
+
+                "📸 Cake Design Photo:\n" +
+                imageUrl;
+
+            const whatsappUrl =
+                "https://wa.me/" +
+                WHATSAPP_NUMBER +
+                "?text=" +
+                encodeURIComponent(message);
 
             showMessage(
-                "Request saved! WhatsApp open karala Send button eka press karanna.",
+                "Thank you! Your custom cake request was submitted successfully. Rashi will contact you to discuss your design and price.",
                 "success"
             );
+
+            // =====================================
+            // OPEN WHATSAPP
+            // =====================================
 
             if (whatsappWindow && !whatsappWindow.closed) {
                 whatsappWindow.location.href = whatsappUrl;
             } else {
                 const link = document.createElement("a");
+
                 link.href = whatsappUrl;
                 link.target = "_blank";
                 link.rel = "noopener noreferrer";
-                link.textContent = "Click here to open WhatsApp and send your order";
+                link.textContent =
+                    "Click here to open WhatsApp and send your order";
+
                 messageBox.appendChild(document.createElement("br"));
                 messageBox.appendChild(link);
             }
 
+            // =====================================
+            // RESET FORM
+            // =====================================
+
             form.reset();
+
             photoPreview.hidden = true;
             photoPreview.removeAttribute("src");
+
             dateInput.min = today;
 
         } catch (error) {
@@ -191,10 +294,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 whatsappWindow.close();
             }
 
-            showMessage(error.message || "Order eka submit karanna bari una.");
+            showMessage(
+                error.message || "Order eka submit karanna bari una."
+            );
+
         } finally {
             submitButton.disabled = false;
             submitButton.textContent = "🎂 Send Custom Cake Request";
         }
     });
 });
+```
