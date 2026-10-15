@@ -340,3 +340,63 @@ body.custom-popup-open {
         font-size: 13px;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+/* =====================================
+   FIXED CUSTOM CAKE BUTTON
+   STAYS IN THE SAME PLACE WHILE SCROLLING
+===================================== */
+
+.fixed-custom-cake-button {
+    position: fixed;
+    left: 20px;
+    bottom: 22px;
+    z-index: 9998;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 14px 20px;
+    max-width: calc(100vw - 100px);
+
+    background: linear-gradient(135deg, #a52f50, #d65d7d);
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+
+    border: 2px solid #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 5px 18px rgba(100, 30, 50, 0.25);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fixed-custom-cake-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(100, 30, 50, 0.35);
+}
+
+@media (max-width: 480px) {
+    .fixed-custom-cake-button {
+        left: 10px;
+        bottom: 14px;
+        padding: 12px 14px;
+        font-size: 12px;
+        max-width: calc(100vw - 90px);
+    }
+}
+
