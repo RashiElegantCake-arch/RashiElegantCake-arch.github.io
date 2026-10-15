@@ -1,4 +1,4 @@
-```javascript
+```javascript```
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("customCakeForm");
 
@@ -290,4 +290,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-```
