@@ -51,9 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dateInput.min = today;
 
-    // =====================================
     // PHOTO PREVIEW AND VALIDATION
-    // =====================================
 
     photoInput.addEventListener("change", () => {
         messageBox.textContent = "";
@@ -80,9 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         photoPreview.hidden = false;
     });
 
-    // =====================================
     // SUBMIT CUSTOM CAKE REQUEST
-    // =====================================
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -142,15 +138,13 @@ document.addEventListener("DOMContentLoaded", () => {
         submitButton.disabled = true;
         submitButton.textContent = "Processing order...";
 
-        // WhatsApp tab eka kalin open karala popup blocking adu karanawa.
+        // Open WhatsApp tab before asynchronous work
         const whatsappWindow = window.open("about:blank", "_blank");
 
         try {
             const client = getClient();
 
-            // =====================================
             // UPLOAD REFERENCE CAKE PHOTO
-            // =====================================
 
             const extension = {
                 "image/jpeg": "jpg",
@@ -185,9 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const imageUrl = imageData.publicUrl;
 
-            // =====================================
             // SAVE REQUEST TO SUPABASE
-            // =====================================
 
             const { error: insertError } = await client
                 .from("custom_cake_requests")
@@ -210,17 +202,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
-            // =====================================
-            // WHATSAPP MESSAGE
-            // SAME FORMAT AS NORMAL CAKE ORDER
-            // =====================================
+            // WHATSAPP MESSAGE - MATCH NORMAL CAKE ORDER FORMAT
 
             const message =
                 "🎂 NEW CUSTOM CAKE REQUEST - Rashi Elegant Cake\n\n" +
 
-                "👤 Customer: " + customerName + "\n" +
+                "👤 Customer: " + customerName + "\n\n" +
 
-                "📞 Contact: " + customerPhone + "\n\n" +
+                "📞 Contact:\n" +
+                customerPhone + "\n\n" +
 
                 "🎂 Cake:\n" +
                 "Custom Cake Request\n\n" +
@@ -257,9 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "success"
             );
 
-            // =====================================
             // OPEN WHATSAPP
-            // =====================================
 
             if (whatsappWindow && !whatsappWindow.closed) {
                 whatsappWindow.location.href = whatsappUrl;
@@ -276,9 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageBox.appendChild(link);
             }
 
-            // =====================================
             // RESET FORM
-            // =====================================
 
             form.reset();
 
