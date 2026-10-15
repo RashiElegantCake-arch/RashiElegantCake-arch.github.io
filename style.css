@@ -400,3 +400,23 @@ body.custom-popup-open {
     }
 }
 
+/* Smaller Fixed Custom Cake Button */
+.fixed-custom-cake-button {
+    padding: 9px 12px;
+    font-size: 11px;
+    gap: 5px;
+    border-width: 1px;
+    border-radius: 22px;
+    left: 12px;
+    bottom: 16px;
+}
+
+@media (max-width: 480px) {
+    .fixed-custom-cake-button {
+        padding: 8px 10px;
+        font-size: 10px;
+        left: 8px;
+        bottom: 12px;
+    }
+}
+
