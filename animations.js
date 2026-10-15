@@ -126,8 +126,51 @@ document.addEventListener("DOMContentLoaded", () => {
                 "#customRequestSubmit, [data-open-custom-cake]"
             );
 
+       
         if (isOrderButton) {
             element.classList.add("romantic-order-glow");
         }
     });
+
+    // 5. CONTINUOUS CUPCAKE RAIN 🍰
+    const rain = document.querySelector(".cupcake-rain");
+
+    if (rain && !rain.dataset.continuousRain) {
+        rain.dataset.continuousRain = "true";
+        rain.replaceChildren();
+
+        const cupcakeCount = window.innerWidth <= 600 ? 12 : 20;
+        const cupcakes = ["🧁", "🧁", "🧁", "🍰"];
+
+        for (let i = 0; i < cupcakeCount; i++) {
+            const cupcake = document.createElement("span");
+
+            cupcake.textContent = cupcakes[i % cupcakes.length];
+
+            cupcake.style.setProperty(
+                "--cupcake-left",
+                `${(i * 37 + 7) % 100}%`
+            );
+            cupcake.style.setProperty(
+                "--cupcake-size",
+                `${20 + (i % 3) * 6}px`
+            );
+            cupcake.style.setProperty(
+                "--cupcake-duration",
+                `${6 + (i % 5) * 1.4}s`
+            );
+            cupcake.style.setProperty(
+                "--cupcake-delay",
+                `${-(i * 1.1)}s`
+            );
+            cupcake.style.setProperty(
+                "--cupcake-drift",
+                `${i % 2 === 0 ? 35 : -35}px`
+            );
+
+            rain.appendChild(cupcake);
+        }
+    }
+});
+
 });
