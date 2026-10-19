@@ -68,9 +68,13 @@ async function loadCakes() {
             await supabaseClient
                 .from("cakes")
                 .select("*")
-                .order("id", {
-                    ascending: false
-                });
+               .order("created_at", {
+    ascending: false,
+    nullsFirst: false
+})
+.order("id", {
+    ascending: false
+});
 
 
         if (error) {
