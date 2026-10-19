@@ -40,7 +40,10 @@ async function loadAdminCakes() {
 
   if (typeof supabaseClient !== "undefined" && supabaseClient) {
     try {
-      const { data, error } = await supabaseClient.from("cakes").select("*");
+      const { data, error } = await supabaseClient
+    .from("cakes")
+    .select("*")
+    .order("id", { ascending: true });
       if (!error && data) {
         renderAdminList(data);
         return;
@@ -56,7 +59,7 @@ async function loadAdminCakes() {
 
 function renderAdminList(cakes) {
   const list = document.getElementById("adminList");
-  list.innerHTML = cakes.map(c => {
+  list.innerHTML = cakes.map((c, index) => {
     const imgUrl = (c.image_url && !c.image_url.includes("images/cake-placeholder")) ? c.image_url : FALLBACK_IMAGE;
     const p500 = c.price_500 || c.p500 || 0;
     const p1000 = c.price_1000 || c.p1000 || 0;
@@ -66,7 +69,7 @@ function renderAdminList(cakes) {
       <div class="admin-row">
         <img src="${imgUrl}" onerror="this.src='${FALLBACK_IMAGE}'">
         <div>
-          <b>${esc(c.name)}</b><br>
+          <b>${String(index + 1).padStart(2, "0")}. ${esc(c.name)}</b><br>
           <small>500g: Rs. ${Number(p500).toLocaleString()} • 1KG: Rs. ${Number(p1000).toLocaleString()} • ${avail ? "Available" : "Unavailable"}</small>
         </div>
         <div class="actions">
