@@ -194,3 +194,112 @@ function resetForm() {
 if (sessionStorage.getItem("rashiAdmin") === "1") {
   showPanel();
 }
+
+
+
+
+
+/* ================= ORDER CALENDAR ================= */
+
+function localDateString(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function calendarEscape(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
+
+async function loadOrderCalendar() {
+  const dateInput = document.getElementById("calendarDate");
+  const status = document.getElementById("calendarStatus");
+  const output = document.getElementById("calendarOrders");
+
+  if (!dateInput || !status || !output) return;
+
+  const selectedDate = dateInput.value;
+  output.innerHTML = "";
+  status.textContent = "Loading orders...";
+
+  if (typeof supabaseClient === "undefined" || !supabaseClient) {
+    status.textContent = "Supabase is not connected.";
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("custom_cake_requests")
+      .select("*")
+      .eq("required_date", selectedDate)
+      .order("required_time", { ascending: true });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      status.textContent = "No custom cake orders found for this date.";
+      return;
+    }
+
+    status.textContent = `${data.length} custom cake order(s) found.`;
+
+    output.innerHTML = data.map(order => {
+      const name = calendarEscape(order.customer_name);
+      const phone = calendarEscape(order.customer_phone);
+      const weight = calendarEscape(order.cake_weight);
+      const time = calendarEscape(order.required_time || "Not specified");
+      const writing = calendarEscape(order.cake_writing || "None");
+      const delivery = calendarEscape(order.delivery_details || "Not specified");
+      const image = order.reference_image_url
+        ? `<p><a href="${calendarEscape(order.reference_image_url)}" target="_blank" rel="noopener noreferrer">View reference photo</a></p>`
+        : "";
+
+      return `
+        <div class="admin-row" style="grid-template-columns:1fr; margin-top:10px">
+          <div>
+            <b>${name}</b>
+            <small>
+              Phone: ${phone}<br>
+              Weight: ${weight}<br>
+              Time: ${time}<br>
+              Cake writing: ${writing}<br>
+              Delivery / pickup: ${delivery}<br>
+              Status: ${calendarEscape(order.status || "pending")}
+            </small>
+            ${image}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  } catch (error) {
+    console.error("Order calendar error:", error);
+    status.textContent =
+      "Could not load orders. Check Supabase table permissions and column names.";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const dateInput = document.getElementById("calendarDate");
+  const refreshButton = document.getElementById("calendarRefresh");
+
+  if (!dateInput || !refreshButton) return;
+
+  dateInput.value = localDateString();
+  dateInput.addEventListener("change", loadOrderCalendar);
+  refreshButton.addEventListener("click", loadOrderCalendar);
+});
+
+const originalShowPanelForCalendar = showPanel;
+
+showPanel = function () {
+  originalShowPanelForCalendar();
+  loadOrderCalendar();
+};
