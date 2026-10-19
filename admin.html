@@ -565,6 +565,41 @@
         </div>
 
 
+
+
+
+
+
+
+
+
+
+        
+<!-- ================= ORDER CALENDAR ================= -->
+
+<div class="admin-card" id="orderCalendarSection">
+    <h2>📅 Order Calendar</h2>
+    <p>Select a date to view custom cake orders scheduled for that day.</p>
+
+    <div class="two">
+        <label>
+            Select Date
+            <input type="date" id="calendarDate">
+        </label>
+
+        <button
+            class="btn"
+            type="button"
+            id="calendarRefresh"
+            style="align-self:end">
+            🔄 Refresh Orders
+        </button>
+    </div>
+
+    <p id="calendarStatus" role="status">Loading orders...</p>
+    <div id="calendarOrders"></div>
+</div>
+
         <!-- ================= CAKES ================= -->
 
         <div class="admin-card">
