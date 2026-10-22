@@ -64,17 +64,13 @@ async function loadCakes() {
 
     try {
 
-        const { data, error } =
-            await supabaseClient
-                .from("cakes")
-                .select("*")
-               .order("created_at", {
-    ascending: false,
-    nullsFirst: false
-})
-.order("id", {
-    ascending: false
-});
+const { data, error } =
+    await supabaseClient
+        .from("cakes")
+        .select("*")
+        .order("display_order", {
+            ascending: false
+        });
 
 
         if (error) {
