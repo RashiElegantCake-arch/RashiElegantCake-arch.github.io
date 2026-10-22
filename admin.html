@@ -187,6 +187,217 @@
             padding: 5px;
         }
 
+
+
+
+
+
+
+
+
+        
+/* MONTHLY ORDER CALENDAR */
+.calendar-toolbar {
+    display: grid;
+    grid-template-columns: 46px 1fr 46px;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 12px;
+}
+
+.calendar-toolbar h3 {
+    text-align: center;
+    color: #572534;
+    font-size: 18px;
+}
+
+.calendar-nav {
+    min-height: 44px;
+    border: 1px solid #f0dfe4;
+    border-radius: 11px;
+    background: #fff0f4;
+    color: #7e3048;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0 12px;
+    color: #79676b;
+    font-size: 12px;
+}
+
+.calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.regular-dot { background: #4385e8; }
+.custom-dot { background: #d65380; }
+.both-dot { background: #9a65cf; }
+
+.monthly-calendar {
+    overflow: hidden;
+    border: 1px solid #f0dfe4;
+    border-radius: 13px;
+}
+
+.calendar-weekdays,
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-weekdays > div {
+    padding: 10px 0;
+    background: #fff0f4;
+    color: #70243d;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.calendar-day {
+    min-width: 0;
+    min-height: 75px;
+    padding: 5px 2px;
+    border: 0;
+    border-top: 1px solid #f0dfe4;
+    border-right: 1px solid #f0dfe4;
+    background: #fff;
+    color: #50323b;
+    text-align: center;
+}
+
+.calendar-day:nth-child(7n) {
+    border-right: 0;
+}
+
+.calendar-day.empty {
+    background: #fffafb;
+}
+
+.calendar-day .day-number {
+    display: block;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.calendar-day .day-count {
+    display: block;
+    margin-top: 5px;
+    font-size: 9px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.calendar-day.has-regular { background: #eef5ff; }
+.calendar-day.has-custom { background: #fff0f5; }
+.calendar-day.has-both { background: #f4edff; }
+
+.calendar-day.selected {
+    outline: 2px solid #7e3048;
+    outline-offset: -3px;
+}
+
+.calendar-day.today .day-number {
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    place-items: center;
+    border-radius: 50%;
+    background: #7e3048;
+    color: white;
+}
+
+.calendar-selected-date {
+    margin-top: 22px;
+}
+
+.calendar-selected-date h3 {
+    color: #572534;
+    font-family: Georgia, serif;
+}
+
+.calendar-order-card {
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid #f0dfe4;
+    border-radius: 13px;
+    background: #fffafa;
+    overflow-wrap: anywhere;
+}
+
+.calendar-order-card h4 {
+    color: #70243d;
+    margin-bottom: 7px;
+}
+
+.calendar-order-card p {
+    margin: 4px 0;
+    font-size: 13px;
+}
+
+.calendar-order-card img {
+    width: min(180px, 100%);
+    max-height: 200px;
+    margin-top: 10px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: white;
+}
+
+.calendar-order-type {
+    display: inline-block;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    background: #f3e4e8;
+    color: #7e3048;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+@media (max-width: 500px) {
+    .calendar-day {
+        min-height: 62px;
+        padding: 4px 1px;
+    }
+
+    .calendar-day .day-number {
+        font-size: 11px;
+    }
+
+    .calendar-day .day-count {
+        font-size: 8px;
+    }
+
+    .calendar-weekdays > div {
+        padding: 8px 0;
+        font-size: 10px;
+    }
+
+    .calendar-toolbar h3 {
+        font-size: 15px;
+    }
+
+    .calendar-legend {
+        gap: 8px;
+        font-size: 10px;
+    }
+}
+
         /* ================= ADMIN LIST ================= */
 
         #adminList {
@@ -575,30 +786,55 @@
 
 
         
-<!-- ================= ORDER CALENDAR ================= -->
 
+<!-- MONTHLY ORDER CALENDAR -->
 <div class="admin-card" id="orderCalendarSection">
     <h2>📅 Order Calendar</h2>
-    <p>Select a date to view custom cake orders scheduled for that day.</p>
+    <p>View regular and custom cake orders by date.</p>
 
-    <div class="two">
-        <label>
-            Select Date
-            <input type="date" id="calendarDate">
-        </label>
+    <div class="calendar-toolbar">
+        <button type="button" class="calendar-nav" id="calendarPrev">
+            ❮
+        </button>
 
-        <button
-            class="btn"
-            type="button"
-            id="calendarRefresh"
-            style="align-self:end">
-            🔄 Refresh Orders
+        <h3 id="calendarMonthTitle">Loading month...</h3>
+
+        <button type="button" class="calendar-nav" id="calendarNext">
+            ❯
         </button>
     </div>
 
-    <p id="calendarStatus" role="status">Loading orders...</p>
-    <div id="calendarOrders"></div>
+    <button type="button" class="btn secondary" id="calendarToday">
+        Today
+    </button>
+
+    <div class="calendar-legend">
+        <span><i class="legend-dot regular-dot"></i> Regular orders</span>
+        <span><i class="legend-dot custom-dot"></i> Custom orders</span>
+        <span><i class="legend-dot both-dot"></i> Both</span>
+    </div>
+
+    <div class="monthly-calendar">
+        <div class="calendar-weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+
+        <div id="calendarDays" class="calendar-days"></div>
+    </div>
+
+    <div class="calendar-selected-date">
+        <h3 id="selectedDateTitle">Select a date</h3>
+        <p id="calendarStatus" role="status">Select a date to view orders.</p>
+        <div id="calendarOrders"></div>
+    </div>
 </div>
+
 
         <!-- ================= CAKES ================= -->
 
