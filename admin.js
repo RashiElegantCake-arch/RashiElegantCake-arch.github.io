@@ -402,12 +402,11 @@ function renderSelectedDayOrders() {
             order.cake_name || (isCustom ? "Custom cake" : "Cake order")
         );
 
-        const imageUrl = calendarSafeImageUrl(
-            isCustom
-                ? order.reference_image_url
-                : (order.cake_image_url || order.image_url)
-        );
-
+const imageUrl = calendarSafeImageUrl(
+    isCustom
+        ? (order.reference_image_url || "")
+        : (order.cake_image_url || order.image_url || "")
+);
         const imageHtml = imageUrl
             ? `
                 <a href="${calendarEscape(imageUrl)}"
