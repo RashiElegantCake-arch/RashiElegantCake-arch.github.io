@@ -495,10 +495,9 @@ async function loadOrderCalendar() {
                 .lte("required_date", end),
 
             supabaseClient
-                .from("custom_cake_requests")
-                .select("*")
-                .gte("required_date", start)
-                .lte("required_date", end)
+        .from("custom_cake_requests")
+        .select("*")
+        .order("required_date", { ascending: true })
         ]);
 console.log("Calendar month:", start, "to", end);
 console.log("Custom orders error:", customResult.error);
