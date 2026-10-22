@@ -500,7 +500,9 @@ async function loadOrderCalendar() {
                 .gte("required_date", start)
                 .lte("required_date", end)
         ]);
-
+console.log("Calendar month:", start, "to", end);
+console.log("Custom orders error:", customResult.error);
+console.log("Custom orders received:", customResult.data);
         // Ignore outdated results if the month changed while loading.
         if (thisLoad !== calendarLoadVersion) return;
 
