@@ -203,15 +203,20 @@ if (sessionStorage.getItem("rashiAdmin") === "1") {
 
 
 
+
+
+
 /* =========================================
    MONTHLY ORDER CALENDAR
-   Custom orders + configurable regular orders
+   Regular + Custom Orders
+   Shows cake/reference photos
 ========================================= */
 
 let calendarViewDate = new Date();
 let calendarSelectedDate = localDateString();
 let calendarOrdersByDate = {};
 let calendarLoading = false;
+let calendarLoadVersion = 0;
 
 function localDateString(date = new Date()) {
     const year = date.getFullYear();
@@ -231,8 +236,40 @@ function calendarEscape(value) {
     }[char]));
 }
 
+function calendarSafeImageUrl(value) {
+    if (!value) return "";
+
+    try {
+        const url = new URL(String(value), window.location.href);
+
+        if (url.protocol !== "https:" && url.protocol !== "http:") {
+            return "";
+        }
+
+        return url.href;
+    } catch {
+        return "";
+    }
+}
+
 function calendarMonthKey(date) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function calendarTimeValue(value) {
+    if (!value) return "Not specified";
+
+    const match = String(value).match(/^(\d{1,2}):(\d{2})/);
+
+    if (!match) return calendarEscape(value);
+
+    let hour = Number(match[1]);
+    const minute = match[2];
+    const suffix = hour >= 12 ? "PM" : "AM";
+
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute} ${suffix}`;
 }
 
 function renderMonthlyCalendar() {
@@ -281,7 +318,9 @@ function renderMonthlyCalendar() {
             countText = `${regularCount} orders`;
         }
 
-        const selectedClass = dateKey === calendarSelectedDate ? " selected" : "";
+        const selectedClass =
+            dateKey === calendarSelectedDate ? " selected" : "";
+
         const todayClass = dateKey === today ? " today" : "";
 
         html += `
@@ -303,6 +342,7 @@ function renderMonthlyCalendar() {
     days.querySelectorAll("[data-calendar-date]").forEach(button => {
         button.addEventListener("click", () => {
             calendarSelectedDate = button.dataset.calendarDate;
+
             renderMonthlyCalendar();
             renderSelectedDayOrders();
         });
@@ -337,58 +377,88 @@ function renderSelectedDayOrders() {
 
     output.innerHTML = orders.map(order => {
         const isCustom = order.orderType === "custom";
-        const name = calendarEscape(
-            order.customer_name || order.name || "Customer"
+
+        const customerName = calendarEscape(
+            order.customer_name || "Customer"
         );
 
         const phone = calendarEscape(
-            order.customer_phone || order.customerPhone || order.phone || "Not provided"
+            order.customer_phone || "Not provided"
         );
 
         const time = calendarEscape(
-            order.required_time || order.requiredTime || order.time || "Not specified"
+            calendarTimeValue(order.required_time)
         );
 
         const weight = calendarEscape(
-            order.cake_weight || order.weight || "Not specified"
+            order.cake_weight || "Not specified"
         );
 
-        const writing = calendarEscape(
-            order.cake_writing || order.message || "None"
-        );
-
-        const delivery = calendarEscape(
-            order.delivery_details || order.delivery || "Not specified"
+        const statusText = calendarEscape(
+            order.status || "pending"
         );
 
         const cakeName = calendarEscape(
-            order.cake_name || order.cakeName || order.name_of_cake || "Custom cake"
+            order.cake_name || (isCustom ? "Custom cake" : "Cake order")
         );
 
-        const imageUrl = isCustom
-            ? order.reference_image_url
-            : (order.image_url || order.cake_image_url || "");
+        const imageUrl = calendarSafeImageUrl(
+            isCustom
+                ? order.reference_image_url
+                : (order.cake_image_url || order.image_url)
+        );
 
         const imageHtml = imageUrl
-            ? `<p><a href="${calendarEscape(imageUrl)}" target="_blank" rel="noopener noreferrer">View photo</a></p>
-               <a href="${calendarEscape(imageUrl)}" target="_blank" rel="noopener noreferrer">
-                 <img src="${calendarEscape(imageUrl)}" alt="Cake reference photo" loading="lazy">
-               </a>`
-            : "";
+            ? `
+                <a href="${calendarEscape(imageUrl)}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <img
+                        src="${calendarEscape(imageUrl)}"
+                        alt="${isCustom ? "Custom cake reference photo" : "Ordered cake photo"}"
+                        loading="lazy"
+                    >
+                </a>
+                <p>
+                    <a href="${calendarEscape(imageUrl)}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View full photo
+                    </a>
+                </p>
+              `
+            : `<p><strong>Photo:</strong> Not available for this order</p>`;
+
+        const writing = isCustom
+            ? order.cake_writing
+            : order.cake_message;
+
+        const delivery = order.delivery_details || "Not specified";
 
         return `
             <article class="calendar-order-card">
                 <span class="calendar-order-type">
                     ${isCustom ? "Custom Cake Order" : "Regular Cake Order"}
                 </span>
-                <h4>${name}</h4>
+
+                <h4>${customerName}</h4>
+
                 <p><strong>Phone:</strong> ${phone}</p>
                 <p><strong>Time:</strong> ${time}</p>
                 <p><strong>Weight:</strong> ${weight}</p>
-                ${isCustom ? `<p><strong>Cake writing:</strong> ${writing}</p>` : ""}
-                ${isCustom ? `<p><strong>Pickup / delivery:</strong> ${delivery}</p>` : ""}
-                ${!isCustom ? `<p><strong>Cake:</strong> ${cakeName}</p>` : ""}
-                <p><strong>Status:</strong> ${calendarEscape(order.status || "pending")}</p>
+                <p><strong>Cake:</strong> ${cakeName}</p>
+
+                ${!isCustom && order.total_price != null
+                    ? `<p><strong>Total:</strong> Rs. ${calendarEscape(order.total_price)}</p>`
+                    : ""}
+
+                ${writing
+                    ? `<p><strong>Cake writing/message:</strong> ${calendarEscape(writing)}</p>`
+                    : ""}
+
+                <p><strong>Pickup / delivery:</strong> ${calendarEscape(delivery)}</p>
+                <p><strong>Status:</strong> ${statusText}</p>
+
                 ${imageHtml}
             </article>
         `;
@@ -396,60 +466,114 @@ function renderSelectedDayOrders() {
 }
 
 async function loadOrderCalendar() {
-    if (calendarLoading) return;
-    calendarLoading = true;
+    const thisLoad = ++calendarLoadVersion;
 
     const status = document.getElementById("calendarStatus");
 
-    try {
-        if (typeof supabaseClient === "undefined" || !supabaseClient) {
-            if (status) status.textContent = "Supabase is not connected.";
-            return;
-        }
+    if (typeof supabaseClient === "undefined" || !supabaseClient) {
+        if (status) status.textContent = "Supabase is not connected.";
+        return;
+    }
 
-        const start = `${calendarMonthKey(calendarViewDate)}-01`;
-        const endDate = new Date(
+    const start = `${calendarMonthKey(calendarViewDate)}-01`;
+
+    const end = localDateString(
+        new Date(
             calendarViewDate.getFullYear(),
             calendarViewDate.getMonth() + 1,
             0
-        );
-        const end = localDateString(endDate);
+        )
+    );
 
-        const { data, error } = await supabaseClient
-            .from("custom_cake_requests")
-            .select("*")
-            .gte("required_date", start)
-            .lte("required_date", end)
-            .order("required_time", { ascending: true });
+    if (status) status.textContent = "Loading orders...";
 
-        if (error) throw error;
+    try {
+        const [regularResult, customResult] = await Promise.all([
+            supabaseClient
+                .from("regular_cake_orders")
+                .select("*")
+                .gte("required_date", start)
+                .lte("required_date", end),
+
+            supabaseClient
+                .from("custom_cake_requests")
+                .select("*")
+                .gte("required_date", start)
+                .lte("required_date", end)
+        ]);
+
+        // Ignore outdated results if the month changed while loading.
+        if (thisLoad !== calendarLoadVersion) return;
+
+        if (regularResult.error) {
+            console.error("Regular orders query error:", regularResult.error);
+        }
+
+        if (customResult.error) {
+            console.error("Custom orders query error:", customResult.error);
+        }
+
+        if (regularResult.error && customResult.error) {
+            throw new Error(
+                "Could not read either order table. Check Supabase permissions and table names."
+            );
+        }
 
         calendarOrdersByDate = {};
 
-        (data || []).forEach(order => {
-            if (!order.required_date) return;
+        function addOrders(records, type) {
+            (records || []).forEach(order => {
+                if (!order.required_date) return;
 
-            if (!calendarOrdersByDate[order.required_date]) {
-                calendarOrdersByDate[order.required_date] = [];
-            }
+                const dateKey = String(order.required_date).slice(0, 10);
 
-            calendarOrdersByDate[order.required_date].push({
-                ...order,
-                orderType: "custom"
+                if (!calendarOrdersByDate[dateKey]) {
+                    calendarOrdersByDate[dateKey] = [];
+                }
+
+                calendarOrdersByDate[dateKey].push({
+                    ...order,
+                    orderType: type
+                });
             });
+        }
+
+        if (!regularResult.error) {
+            addOrders(regularResult.data, "regular");
+        }
+
+        if (!customResult.error) {
+            addOrders(customResult.data, "custom");
+        }
+
+        // Sort each date by required time.
+        Object.values(calendarOrdersByDate).forEach(orders => {
+            orders.sort((a, b) =>
+                String(a.required_time || "").localeCompare(
+                    String(b.required_time || "")
+                )
+            );
         });
 
         renderMonthlyCalendar();
         renderSelectedDayOrders();
 
+        if (regularResult.error || customResult.error) {
+            if (status) {
+                status.textContent =
+                    "Some orders could not be loaded. Check the browser console and Supabase permissions.";
+            }
+        }
+
     } catch (error) {
+        if (thisLoad !== calendarLoadVersion) return;
+
         console.error("Monthly order calendar error:", error);
+
         if (status) {
             status.textContent =
-                "Could not load custom orders. Check Supabase table permissions.";
+                "Could not load orders. Check Supabase connection, table names, and read permissions.";
         }
-    } finally {
-        calendarLoading = false;
     }
 }
 
@@ -466,6 +590,8 @@ document.addEventListener("DOMContentLoaded", () => {
             calendarViewDate.getMonth() - 1,
             1
         );
+
+        calendarSelectedDate = localDateString(calendarViewDate);
         loadOrderCalendar();
     });
 
@@ -475,12 +601,15 @@ document.addEventListener("DOMContentLoaded", () => {
             calendarViewDate.getMonth() + 1,
             1
         );
+
+        calendarSelectedDate = localDateString(calendarViewDate);
         loadOrderCalendar();
     });
 
     today.addEventListener("click", () => {
         calendarViewDate = new Date();
         calendarSelectedDate = localDateString();
+
         loadOrderCalendar();
     });
 
@@ -488,7 +617,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadOrderCalendar();
 });
 
-/* Refresh calendar whenever admin opens the panel */
+/* Refresh the calendar when the admin panel opens */
 const originalShowPanelForCalendar = showPanel;
 
 showPanel = function () {
